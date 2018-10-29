@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">CodeNotes</string>
+
+    <string name="header">Authorisation</string>
+    <string name="login_username_label">Username</string>
+    <string name="login_username_input_placeholder">Enter username</string>
+    <string name="login_password_label">Password</string>
+    <string name="login_password_input_placeholder">Enter password</string>
+    <string name="login_enter_button_label">Enter</string>
 </resources>

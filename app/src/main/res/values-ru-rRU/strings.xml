@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">КодНоутз</string>
+
+    <string name="header" >Авторизация</string>
+    <string name="login_username_label">Логин</string>
+    <string name="login_username_input_placeholder">Введите логин</string>
+    <string name="login_password_label">Пароль</string>
+    <string name="login_password_input_placeholder">Введите пароль</string>
+    <string name="login_enter_button_label">Войтии</string>
+</resources>
