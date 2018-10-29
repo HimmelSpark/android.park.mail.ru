@@ -7,4 +7,11 @@
     <string name="login_password_label">Password</string>
     <string name="login_password_input_placeholder">Enter password</string>
     <string name="login_enter_button_label">Enter</string>
+    <string name="title_activity_notes">NotesActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
 </resources>

@@ -1,5 +1,7 @@
 package com.example.petrosadaman.codenotes;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Button;
@@ -28,9 +30,13 @@ public class LogReg extends AppCompatActivity {
                 if (manager.doLogin()) {
                     //move to other Activity
                     System.out.println(username + " " + password);
+                    //не забыть отправить данные через бандл
+                    Intent intent = new Intent(LogReg.this, NotesActivity.class);
+                    intent.putExtra("username", username);
+                    intent.putExtra("password", password);
+                    startActivity(intent);
                 }
             }
         });
-
     }
 }
