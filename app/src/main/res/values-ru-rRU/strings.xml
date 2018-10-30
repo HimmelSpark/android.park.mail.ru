@@ -2,10 +2,27 @@
 <resources>
     <string name="app_name">КодНоутз</string>
 
-    <string name="header" >Авторизация</string>
+    <string name="header_log">Авторизация</string>
+    <string name="header_reg">Регистрация</string>
+
     <string name="login_username_label">Логин</string>
     <string name="login_username_input_placeholder">Введите логин</string>
+
     <string name="login_password_label">Пароль</string>
     <string name="login_password_input_placeholder">Введите пароль</string>
-    <string name="login_enter_button_label">Войтии</string>
+
+    <string name="confirm_password_label">Подтвердите</string>
+    <string name="confirm_password_input_placeholder">Повторите</string>
+
+    <string name="login_enter_button_label">Войти</string>
+    <string name="register_button_label">Регистрация</string>
+
+
+    <string name="title_activity_notes">Активити заметок</string>
+    <string name="navigation_drawer_open">Открыть навигацию</string>
+    <string name="navigation_drawer_close">Загруть навигацию</string>
+    <string name="nav_header_title">Ведроид Студио</string>
+    <string name="nav_header_desc">Заголовок навигации</string>
+    <string name="action_settings">Настройки</string>
+    <string name="hello_blank_fragment">Хелло пустой фрагмент</string>
 </resources>
