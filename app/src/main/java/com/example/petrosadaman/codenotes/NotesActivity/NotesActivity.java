@@ -1,10 +1,14 @@
 package com.example.petrosadaman.codenotes.NotesActivity;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -18,59 +22,57 @@ import android.widget.TextView;
 
 import com.example.petrosadaman.codenotes.R;
 
-public class NotesActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+
+public class NotesActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
+    private RecyclerView recyclerView;
+    private NotesAdapter notesAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notes);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+//        final FragmentManager fragmentManager = getSupportFragmentManager();
+//        final FragmentTransaction transaction = fragmentManager.beginTransaction();
+//
+//        NoteListFragment list = new NoteListFragment();
+//        transaction.replace(R.id.list_container, list);
+//        transaction.commit();
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
+        //TODO:: recyclerView через фрагмент не получилось добавить
+        //TODO:: пока что он вписан в layout данного activity
+        //TODO:: добавить клик по элементу и переход к фрагменту заметки
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        recyclerView = findViewById(R.id.notes);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        notesAdapter = new NotesAdapter();
+        recyclerView.setAdapter(notesAdapter);
+        loadNotes();
+    }
 
-        /*
-        *
-        *   here goes my code
-        *
-        *
-         */
-        TextView textView = findViewById(R.id.greeting);
-        String username = getIntent().getStringExtra("username");
-        String password = getIntent().getStringExtra("password");
-        textView.setText("Hello, " + username + "\nYour password is: " + password + "\nLOL");
+    private void loadNotes() {
+        Collection<Note> notes = getSomeNotes();
+        notesAdapter.setItems(notes);
+    }
 
-        /*
-         *
-         *   here goes my code
-         *
-         *
-         */
-
-        final FragmentManager fragmentManager = getSupportFragmentManager();
-        final FragmentTransaction transaction = fragmentManager.beginTransaction();
-
-        NoteListFragment list = new NoteListFragment();
-        transaction.replace(R.id.list_container, list);
-        transaction.commit();
-
+    // Для тестирования!
+    private List<Note> getSomeNotes() {
+        return Arrays.asList(
+                new Note("Note1"),
+                new Note("Note2"),
+                new Note("Note3"),
+                new Note("Note4"),
+                new Note("Note5"),
+                new Note("Note6"),
+                new Note("Note7"),
+                new Note("Note8"),
+                new Note("Note9"),
+                new Note("Note10")
+        );
     }
 
     @Override
@@ -107,7 +109,7 @@ public class NotesActivity extends AppCompatActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 

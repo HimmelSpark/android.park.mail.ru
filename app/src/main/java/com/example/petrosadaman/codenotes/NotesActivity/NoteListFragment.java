@@ -12,11 +12,6 @@ import android.view.ViewGroup;
 import com.example.petrosadaman.codenotes.R;
 
 public class NoteListFragment extends Fragment {
-
-    public NoteListFragment() {
-
-    }
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
