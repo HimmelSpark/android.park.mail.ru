@@ -22,4 +22,10 @@
         app:headerLayout="@layout/nav_header_notes"
         app:menu="@menu/activity_notes_drawer" />
 
+
+    <RelativeLayout
+        android:id="@+id/list_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
 </android.support.v4.widget.DrawerLayout>

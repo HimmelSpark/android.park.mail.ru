@@ -1,8 +1,10 @@
-package com.example.petrosadaman.codenotes;
+package com.example.petrosadaman.codenotes.NotesActivity;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,6 +15,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+
+import com.example.petrosadaman.codenotes.R;
 
 public class NotesActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -52,6 +56,21 @@ public class NotesActivity extends AppCompatActivity
         String username = getIntent().getStringExtra("username");
         String password = getIntent().getStringExtra("password");
         textView.setText("Hello, " + username + "\nYour password is: " + password + "\nLOL");
+
+        /*
+         *
+         *   here goes my code
+         *
+         *
+         */
+
+        final FragmentManager fragmentManager = getSupportFragmentManager();
+        final FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+        NoteListFragment list = new NoteListFragment();
+        transaction.replace(R.id.list_container, list);
+        transaction.commit();
+
     }
 
     @Override
