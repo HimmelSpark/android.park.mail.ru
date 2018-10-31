@@ -16,6 +16,7 @@ import java.util.List;
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHolder> {
 
     private List<Note> noteList = new ArrayList<>();
+    private OnItemClickListener itemClickListener;
 
     public void setItems(Collection<Note> notes) {
         noteList.addAll(notes);
@@ -30,6 +31,10 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
     public void clearItems() {
         noteList.clear();
         notifyDataSetChanged();
+    }
+
+    public void setItemClickListener(final OnItemClickListener listener) {
+        this.itemClickListener = listener;
     }
 
     @NonNull
@@ -50,18 +55,32 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
         return noteList.size();
     }
 
-    class NoteViewHolder extends RecyclerView.ViewHolder {
+    public interface OnItemClickListener {
+        void onClick(View view, int position);
+    }
+
+
+    class NoteViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private TextView textView;
 
         NoteViewHolder(@NonNull View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
             textView = itemView.findViewById(R.id.note);
         }
 
         void bind(Note note) {
             textView.setText(note.getData());
             textView.setVisibility(note.getData() != null ? View.VISIBLE : View.GONE);
+        }
+
+
+        @Override
+        public void onClick(View v) {
+            if (itemClickListener != null) {
+                itemClickListener.onClick(v, getAdapterPosition());
+            }
         }
     }
 }

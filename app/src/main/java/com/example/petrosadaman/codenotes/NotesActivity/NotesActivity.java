@@ -18,6 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.example.petrosadaman.codenotes.R;
@@ -26,10 +27,12 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-public class NotesActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class NotesActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener, NotesAdapter.OnItemClickListener {
 
     private RecyclerView recyclerView;
     private NotesAdapter notesAdapter;
+    private List<Note> noteList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,18 +48,22 @@ public class NotesActivity extends AppCompatActivity implements NavigationView.O
 
         //TODO:: recyclerView через фрагмент не получилось добавить
         //TODO:: пока что он вписан в layout данного activity
-        //TODO:: добавить клик по элементу и переход к фрагменту заметки
+        //TODO:: что за view принимает onItemClickListener?
+        //TODO:: использовать DifUtil, чтобы не пересоздавать весь список view при обновлении данных
+        loadNotes();
 
         recyclerView = findViewById(R.id.notes);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
         notesAdapter = new NotesAdapter();
+        notesAdapter.setItems(noteList);
+        notesAdapter.setItemClickListener(this);
         recyclerView.setAdapter(notesAdapter);
-        loadNotes();
+
     }
 
     private void loadNotes() {
-        Collection<Note> notes = getSomeNotes();
-        notesAdapter.setItems(notes);
+        noteList = (getSomeNotes());
     }
 
     // Для тестирования!
@@ -130,5 +137,10 @@ public class NotesActivity extends AppCompatActivity implements NavigationView.O
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onClick(View view, int position) {
+        System.out.println("clicked item: " + noteList.get(position).getData() + ": at position " + position);
     }
 }
