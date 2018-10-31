@@ -1,10 +1,8 @@
 package com.example.petrosadaman.codenotes.NotesActivity;
 
-import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,22 +11,20 @@ import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.AdapterView;
-import android.widget.TextView;
 
+import com.example.petrosadaman.codenotes.LogRegActivity.RegistrationFragment;
 import com.example.petrosadaman.codenotes.R;
-
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 public class NotesActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, NotesAdapter.OnItemClickListener {
+        implements
+        NavigationView.OnNavigationItemSelectedListener,
+        NotesAdapter.OnItemClickListener,
+        RegistrationFragment.OnFragmentInteractionListener {
 
     private RecyclerView recyclerView;
     private NotesAdapter notesAdapter;
@@ -50,16 +46,16 @@ public class NotesActivity extends AppCompatActivity
         //TODO:: пока что он вписан в layout данного activity
         //TODO:: что за view принимает onItemClickListener?
         //TODO:: использовать DifUtil, чтобы не пересоздавать весь список view при обновлении данных
+
         loadNotes();
 
         recyclerView = findViewById(R.id.notes);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         notesAdapter = new NotesAdapter();
-        notesAdapter.setItems(noteList);
         notesAdapter.setItemClickListener(this);
+        notesAdapter.setItems(noteList);
         recyclerView.setAdapter(notesAdapter);
-
     }
 
     private void loadNotes() {
@@ -84,6 +80,7 @@ public class NotesActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
+        findViewById(R.id.list_container).setVisibility(View.VISIBLE);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
@@ -141,6 +138,20 @@ public class NotesActivity extends AppCompatActivity
 
     @Override
     public void onClick(View view, int position) {
-        System.out.println("clicked item: " + noteList.get(position).getData() + ": at position " + position);
+//        System.out.println("clicked item: " + noteList.get(position).getData() + ": at position " + position);
+
+        final FragmentManager fragmentManager = getSupportFragmentManager();
+        final FragmentTransaction transaction = fragmentManager.beginTransaction();
+        SingleNoteFragment noteFragment = new SingleNoteFragment();
+        transaction.replace(R.id.container_for_note, noteFragment);
+        findViewById(R.id.list_container).setVisibility(View.INVISIBLE);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }

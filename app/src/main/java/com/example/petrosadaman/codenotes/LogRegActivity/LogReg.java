@@ -60,7 +60,6 @@ public class LogReg extends AppCompatActivity implements RegistrationFragment.On
     protected void switchToReg() {
         final FragmentManager fragmentManager = getSupportFragmentManager();
         final FragmentTransaction transaction = fragmentManager.beginTransaction();
-
         RegistrationFragment rf = new RegistrationFragment();
         transaction.replace(R.id.container, rf);
         findViewById(R.id.main).setVisibility(View.INVISIBLE);

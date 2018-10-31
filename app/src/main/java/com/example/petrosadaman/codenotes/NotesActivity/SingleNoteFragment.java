@@ -3,7 +3,6 @@ package com.example.petrosadaman.codenotes.NotesActivity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,10 +10,12 @@ import android.view.ViewGroup;
 
 import com.example.petrosadaman.codenotes.R;
 
-public class NoteListFragment extends Fragment {
+public class SingleNoteFragment extends Fragment {
+    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.notelist, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.single_note, container, false);
     }
+
+    //TODO прописать установку данных и заливку при аттаче
 }

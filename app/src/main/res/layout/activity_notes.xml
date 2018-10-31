@@ -22,6 +22,12 @@
         app:headerLayout="@layout/nav_header_notes"
         app:menu="@menu/activity_notes_drawer" />
 
+    <RelativeLayout
+        android:id="@+id/container_for_note"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </RelativeLayout>
+
 
     <LinearLayout
         android:id="@+id/list_container"
@@ -40,5 +46,8 @@
         </ScrollView>
 
     </LinearLayout>
+
+
+
 
 </android.support.v4.widget.DrawerLayout>
