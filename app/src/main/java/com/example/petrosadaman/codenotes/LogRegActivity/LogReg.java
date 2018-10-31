@@ -12,7 +12,7 @@ import android.widget.EditText;
 
 import com.example.petrosadaman.codenotes.LoginManager;
 import com.example.petrosadaman.codenotes.LoginValidator;
-import com.example.petrosadaman.codenotes.NotesActivity;
+import com.example.petrosadaman.codenotes.NotesActivity.NotesActivity;
 import com.example.petrosadaman.codenotes.R;
 
 public class LogReg extends AppCompatActivity implements RegistrationFragment.OnFragmentInteractionListener {
@@ -60,7 +60,6 @@ public class LogReg extends AppCompatActivity implements RegistrationFragment.On
     protected void switchToReg() {
         final FragmentManager fragmentManager = getSupportFragmentManager();
         final FragmentTransaction transaction = fragmentManager.beginTransaction();
-
         RegistrationFragment rf = new RegistrationFragment();
         transaction.replace(R.id.container, rf);
         findViewById(R.id.main).setVisibility(View.INVISIBLE);

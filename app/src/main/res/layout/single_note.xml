@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <EditText
+            android:id="@+id/note_editor"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:textAlignment="viewStart"
+            android:text="IN SINGLE NOTE FRAGMENT!!!"/>
+    </RelativeLayout>
+
+<!-- TODO Разобраться с тем, что текст пишется по центру -->
+
+</android.support.constraint.ConstraintLayout>
