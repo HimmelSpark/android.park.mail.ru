@@ -78,7 +78,6 @@ public class NotesActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        findViewById(R.id.list_container).setVisibility(View.VISIBLE);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
@@ -136,13 +135,10 @@ public class NotesActivity extends AppCompatActivity
 
     @Override
     public void onClick(View view, int position) {
-//        System.out.println("clicked item: " + noteList.get(position).getData() + ": at position " + position);
-
         final FragmentManager fragmentManager = getSupportFragmentManager();
         final FragmentTransaction transaction = fragmentManager.beginTransaction();
         SingleNoteFragment noteFragment = new SingleNoteFragment();
-        transaction.replace(R.id.container_for_note, noteFragment);
-        findViewById(R.id.list_container).setVisibility(View.INVISIBLE);
+        transaction.replace(R.id.list_container, noteFragment);
         transaction.addToBackStack(null);
         transaction.commit();
     }
