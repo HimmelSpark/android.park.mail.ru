@@ -1,4 +1,4 @@
-package com.example.petrosadaman.codenotes.NotesActivity;
+package com.example.petrosadaman.codenotes.Activities.NotesActivity;
 
 public class Note {
 

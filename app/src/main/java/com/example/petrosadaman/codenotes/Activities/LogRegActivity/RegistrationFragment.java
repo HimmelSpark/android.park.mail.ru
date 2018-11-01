@@ -1,4 +1,4 @@
-package com.example.petrosadaman.codenotes.LogRegActivity;
+package com.example.petrosadaman.codenotes.Activities.LogRegActivity;
 
 import android.content.Context;
 import android.net.Uri;

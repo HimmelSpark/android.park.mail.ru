@@ -1,4 +1,4 @@
-package com.example.petrosadaman.codenotes.LogRegActivity;
+package com.example.petrosadaman.codenotes.Activities.LogRegActivity;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -12,7 +12,7 @@ import android.widget.EditText;
 
 import com.example.petrosadaman.codenotes.LoginManager;
 import com.example.petrosadaman.codenotes.LoginValidator;
-import com.example.petrosadaman.codenotes.NotesActivity.NotesActivity;
+import com.example.petrosadaman.codenotes.Activities.NotesActivity.NotesActivity;
 import com.example.petrosadaman.codenotes.R;
 
 public class LogReg extends AppCompatActivity implements RegistrationFragment.OnFragmentInteractionListener {
