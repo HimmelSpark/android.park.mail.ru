@@ -1,5 +1,6 @@
 package com.example.petrosadaman.codenotes.NotesActivity;
 
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -138,7 +139,12 @@ public class NotesActivity extends AppCompatActivity
         final FragmentManager fragmentManager = getSupportFragmentManager();
         final FragmentTransaction transaction = fragmentManager.beginTransaction();
         SingleNoteFragment noteFragment = new SingleNoteFragment();
-        transaction.replace(R.id.list_container, noteFragment);
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            transaction.replace(R.id.list_container, noteFragment);
+        }
+        else {
+            transaction.replace(R.id.note_container,noteFragment);
+        }
         transaction.addToBackStack(null);
         transaction.commit();
     }
