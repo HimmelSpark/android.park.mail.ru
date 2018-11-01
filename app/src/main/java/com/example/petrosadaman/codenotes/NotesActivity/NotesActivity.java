@@ -53,6 +53,9 @@ public class NotesActivity extends AppCompatActivity
         NoteListFragment list = new NoteListFragment();
         list.setNotesAdapter(notesAdapter);
         transaction.replace(R.id.list_container, list);
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+            transaction.replace(R.id.note_container,new SingleNoteFragment());
+        }
         transaction.commit();
 
     }
