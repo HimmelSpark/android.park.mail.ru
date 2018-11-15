@@ -45,6 +45,7 @@ public class LogReg extends AppCompatActivity implements RegistrationFragment.On
         String password = passwordInput.getText().toString();
         if (validator.validate(username, password)) {
             //do login
+            MyHttpClient.doResp("testUser123", "qwertyui");
             if (manager.doLogin()) {
                 //move to other Activity
                 System.out.println(username + " " + password);
