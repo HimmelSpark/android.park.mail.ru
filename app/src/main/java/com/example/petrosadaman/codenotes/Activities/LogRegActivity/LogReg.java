@@ -14,7 +14,10 @@ import android.widget.EditText;
 import com.example.petrosadaman.codenotes.LoginManager;
 import com.example.petrosadaman.codenotes.LoginValidator;
 import com.example.petrosadaman.codenotes.Activities.NotesActivity.NotesActivity;
+import com.example.petrosadaman.codenotes.Models.User.UserModel;
 import com.example.petrosadaman.codenotes.R;
+import com.example.petrosadaman.codenotes.Web.ListenerHandler;
+import com.example.petrosadaman.codenotes.Web.UserApi;
 
 import java.io.IOException;
 
@@ -26,6 +29,20 @@ public class LogReg extends AppCompatActivity implements RegistrationFragment.On
 
     private final LoginValidator validator = new LoginValidator();
     private final LoginManager manager = new LoginManager();
+
+    private ListenerHandler<UserApi.OnUserGetListener> userHandler;
+
+    private UserApi.OnUserGetListener listener = new UserApi.OnUserGetListener() {
+        @Override
+        public void onUserSuccess(final UserModel user) {
+            System.out.println(user.getUsername());
+        }
+
+        @Override
+        public void onUserError(final Exception error) {
+            System.out.println(error.getMessage());
+        }
+    };
 
     private EditText loginInput;
     private EditText passwordInput;
@@ -47,9 +64,13 @@ public class LogReg extends AppCompatActivity implements RegistrationFragment.On
     }
 
     protected void login() {
+
+
         //do login process
         String username = loginInput.getText().toString();
         String password = passwordInput.getText().toString();
+        userHandler = UserApi.getInstance().getUser(new UserModel(username, password), listener);
+
         if (validator.validate(username, password)) {
             //do login
             MyHttpClient.doResp("testUser123", "qwertyui", new Callback() {
@@ -92,6 +113,14 @@ public class LogReg extends AppCompatActivity implements RegistrationFragment.On
         findViewById(R.id.main).setVisibility(View.INVISIBLE);
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (userHandler != null) {
+            userHandler.unregister();
+        }
     }
 
     @Override

@@ -38,7 +38,6 @@ public class UserApi {
     private final UserService service;
 
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
-    private String body;
 
     private UserApi() {
         final Retrofit retrofit = new Retrofit.Builder()
@@ -47,11 +46,11 @@ public class UserApi {
         service = retrofit.create(UserService.class);
     }
 
-    static UserApi getInstance() {
+    public static UserApi getInstance() {
         return INSTANCE;
     }
 
-    ListenerHandler<OnUserGetListener> getUser(final UserModel user, final OnUserGetListener listener) {
+    public ListenerHandler<OnUserGetListener> getUser(final UserModel user, final OnUserGetListener listener) {
         final ListenerHandler<OnUserGetListener> handler = new ListenerHandler<>(listener);
         executor.execute(() -> {
             try {
@@ -106,7 +105,6 @@ public class UserApi {
     }
 
     private UserModel parseUser(final String body) throws IOException {
-        this.body = body;
         try {
             return GSON.fromJson(body, UserModel.class);
         } catch (JsonSyntaxException e) {

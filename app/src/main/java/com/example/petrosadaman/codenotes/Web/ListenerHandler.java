@@ -7,7 +7,7 @@ import android.support.annotation.Nullable;
  * Например, отписку от сетевого запроса при завершении Activity или старте другого запроса, когда
  * результат первого уже не нужен.
  */
-class ListenerHandler<T> {
+public class ListenerHandler<T> {
     private T listener;
 
     ListenerHandler(final T listener) {
@@ -19,7 +19,7 @@ class ListenerHandler<T> {
         return listener;
     }
 
-    void unregister() {
+    public void unregister() {
         listener = null;
     }
 }
