@@ -1,6 +1,7 @@
 package com.example.petrosadaman.codenotes.Activities.LogRegActivity;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -15,11 +16,12 @@ import com.example.petrosadaman.codenotes.LoginValidator;
 import com.example.petrosadaman.codenotes.Activities.NotesActivity.NotesActivity;
 import com.example.petrosadaman.codenotes.R;
 
+import static android.database.sqlite.SQLiteDatabase.openOrCreateDatabase;
+
 public class LogReg extends AppCompatActivity implements RegistrationFragment.OnFragmentInteractionListener {
 
     private final LoginValidator validator = new LoginValidator();
     private final LoginManager manager = new LoginManager();
-
     private EditText loginInput;
     private EditText passwordInput;
     private Button enterButton;
