@@ -25,33 +25,27 @@ import okhttp3.Response;
 
 public class MyHttpClient {
 
+    static enum METHOD {
+        PUT,
+        GET,
+        POST
+    }
+
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
-    public static void doResp(String name, String password) {
+    static void doResp(String name, String password, Callback callback) {
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
                 .url("http://178.128.138.0:8080/users/auth")
-                .post(RequestBody.create(JSON, "{" +
-                        "\"name\": " + name + "\n" +
+//                .url("https://requestbin.jumio.com/1emi44z1")
+                .post(RequestBody.create(JSON, "{\n" +
+                        "\"name\": " + name + ",\n" +
                         "\"password\":" + password + "\n" +
                         "}"))
                 .build();
 
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                call.cancel();
-                System.out.println(e.getMessage() + "_____________message");
-                System.out.println("FAIL________________");
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                System.out.println("SUCCESS______________");
-                System.out.println(response.body().string());
-            }
-        });
+        client.newCall(request).enqueue(callback);
 
     }
 }
