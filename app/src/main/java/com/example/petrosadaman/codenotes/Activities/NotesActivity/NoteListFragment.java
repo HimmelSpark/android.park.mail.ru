@@ -1,5 +1,6 @@
 package com.example.petrosadaman.codenotes.Activities.NotesActivity;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,6 +14,9 @@ import android.view.ViewGroup;
 
 import com.example.petrosadaman.codenotes.R;
 
+import static android.content.Context.MODE_PRIVATE;
+import static android.database.sqlite.SQLiteDatabase.openOrCreateDatabase;
+
 
 public class NoteListFragment extends Fragment {
 
@@ -21,7 +25,7 @@ public class NoteListFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.notelist, container, false);
+               View view = inflater.inflate(R.layout.notelist, container, false);
         RecyclerView rv = view.findViewById(R.id.rv_notes);
         rv.setAdapter(notesAdapter);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());

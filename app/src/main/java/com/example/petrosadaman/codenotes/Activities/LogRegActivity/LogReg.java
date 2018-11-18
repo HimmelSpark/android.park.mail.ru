@@ -2,18 +2,18 @@ package com.example.petrosadaman.codenotes.Activities.LogRegActivity;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.petrosadaman.codenotes.Activities.NotesActivity.NotesActivity;
 import com.example.petrosadaman.codenotes.LoginManager;
 import com.example.petrosadaman.codenotes.LoginValidator;
-import com.example.petrosadaman.codenotes.Activities.NotesActivity.NotesActivity;
 import com.example.petrosadaman.codenotes.Models.User.UserModel;
 import com.example.petrosadaman.codenotes.R;
 import com.example.petrosadaman.codenotes.Web.ListenerHandler;
@@ -29,6 +29,7 @@ public class LogReg extends AppCompatActivity implements RegistrationFragment.On
 
     private final LoginValidator validator = new LoginValidator();
     private final LoginManager manager = new LoginManager();
+
 
     private ListenerHandler<UserApi.OnUserGetListener> userHandler;
 
