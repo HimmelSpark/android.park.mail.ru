@@ -91,7 +91,6 @@ public class UserApi {
         });
     }
 
-
     private void invokeFailure(ListenerHandler<OnUserGetListener> handler, IOException e) {
         mainHandler.post(() -> {
             OnUserGetListener listener = handler.getListener();

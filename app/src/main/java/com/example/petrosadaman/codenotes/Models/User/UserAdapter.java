@@ -1,7 +1,29 @@
 package com.example.petrosadaman.codenotes.Models.User;
 
-public class UserAdapter {
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 
+import java.lang.reflect.Type;
+
+public class UserAdapter implements JsonDeserializer<UserModel>, JsonSerializer<UserModel> {
+
+    @Override
+    public UserModel deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+        return null;
+    }
+
+    @Override
+    public JsonElement serialize(UserModel src, Type typeOfSrc, JsonSerializationContext context) {
+        final JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("name", src.getUsername());
+        jsonObject.addProperty("password", src.getPassword());
+        return jsonObject;
+    }
 }
 
 

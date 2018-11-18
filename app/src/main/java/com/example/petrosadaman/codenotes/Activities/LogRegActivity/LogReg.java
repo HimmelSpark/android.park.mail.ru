@@ -70,7 +70,12 @@ public class LogReg extends AppCompatActivity implements RegistrationFragment.On
         //do login process
         String username = loginInput.getText().toString();
         String password = passwordInput.getText().toString();
-        userHandler = UserApi.getInstance().getUser(new UserModel(username, password), listener);
+
+        UserModel user = new UserModel();
+        user.setUsername(username);
+        user.setPassword(password);
+
+        userHandler = UserApi.getInstance().getUser(user, listener);
 
         if (validator.validate(username, password)) {
             //do login
