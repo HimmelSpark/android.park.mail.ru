@@ -1,21 +1,19 @@
-package com.example.petrosadaman.codenotes.DBCom;
+package com.example.petrosadaman.codenotes.NotesDAO;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-
-import java.lang.reflect.Array;
 
 import static android.database.sqlite.SQLiteDatabase.openOrCreateDatabase;
 
 public class DBCommunication {
 
-    SQLiteDatabase nodesDB;
+
 
     public DBCommunication(){
         nodesDB =  openOrCreateDatabase("nodes.db", null, null);
         nodesDB.execSQL("CREATE TABLE IF NOT EXISTS users (name VARCHAR(200), password VARCHAR(200))");
         nodesDB.execSQL("CREATE TABLE IF NOT EXISTS notes (name VARCHAR(100), note TEXT, user VARCHAR(200) )");
+        nodesDB.execSQL("INSERT INTO users VALUES('admin', 'admin')");
     }
 
     public Boolean checkUser(String user, String password){
