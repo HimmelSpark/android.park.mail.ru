@@ -8,6 +8,6 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 
 public interface UserService {
-    @POST("auth/")
+    @POST("auth")
     Call<ResponseBody> getUser(@Body UserModel user);
 }
