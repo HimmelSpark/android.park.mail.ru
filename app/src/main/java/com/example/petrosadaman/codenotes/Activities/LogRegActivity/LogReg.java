@@ -1,6 +1,7 @@
 package com.example.petrosadaman.codenotes.Activities.LogRegActivity;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,6 +16,7 @@ import com.example.petrosadaman.codenotes.Activities.NotesActivity.NotesActivity
 import com.example.petrosadaman.codenotes.LoginManager;
 import com.example.petrosadaman.codenotes.LoginValidator;
 import com.example.petrosadaman.codenotes.Models.User.UserModel;
+import com.example.petrosadaman.codenotes.NotesDAO.DBManager;
 import com.example.petrosadaman.codenotes.R;
 import com.example.petrosadaman.codenotes.Web.ListenerHandler;
 import com.example.petrosadaman.codenotes.Web.UserApi;
@@ -29,6 +31,7 @@ public class LogReg extends AppCompatActivity implements RegistrationFragment.On
 
     private final LoginValidator validator = new LoginValidator();
     private final LoginManager manager = new LoginManager();
+    public SQLiteDatabase nodesDB;
 
 
     private ListenerHandler<UserApi.OnUserGetListener> userHandler;
@@ -52,6 +55,10 @@ public class LogReg extends AppCompatActivity implements RegistrationFragment.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        final DBManager manager;
+        manager.Мих
+
         setContentView(R.layout.activity_log_reg);
 
         loginInput = findViewById(R.id.edit_user);
@@ -139,4 +146,6 @@ public class LogReg extends AppCompatActivity implements RegistrationFragment.On
         super.onBackPressed();
         findViewById(R.id.main).setVisibility(View.VISIBLE);
     }
-}
+
+
+  }

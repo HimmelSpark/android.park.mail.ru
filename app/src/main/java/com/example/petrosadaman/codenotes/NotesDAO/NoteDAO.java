@@ -1,4 +1,4 @@
-package com.example.petrosadaman.codenotes.DBCom;
+package com.example.petrosadaman.codenotes.NotesDAO;
 
-public class NodeDB {
+public class NoteDAO {
 }
