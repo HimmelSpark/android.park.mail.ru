@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import com.example.petrosadaman.codenotes.Activities.NotesActivity.NotesActivity;
 import com.example.petrosadaman.codenotes.LoginManager;
@@ -37,6 +38,8 @@ public class LogReg extends AppCompatActivity implements RegistrationFragment.On
             //TODO | перекинуть на следующий активити, стерев из истории текущий активити
             //TODO | переделать проверку сообщения через перечисления
 
+            stopProgress();
+
             if (message.getMessage().equals("SUCCESSFULLY_AUTHED")) {
                 switchToNotes();
             }
@@ -44,6 +47,7 @@ public class LogReg extends AppCompatActivity implements RegistrationFragment.On
 
         @Override
         public void onUserError(Exception error) {
+            stopProgress();
             System.out.println("ON_USER_ERROR: " + error.getMessage());
             //TODO написать логирование
         }
@@ -53,24 +57,27 @@ public class LogReg extends AppCompatActivity implements RegistrationFragment.On
     private EditText passwordInput;
     private Button enterButton;
     private Button registerButton;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_reg);
 
-        loginInput = findViewById(R.id.edit_user);
-        passwordInput = findViewById(R.id.edit_password);
-        enterButton = findViewById(R.id.button_login);
-        registerButton = findViewById(R.id.button_register);
+        progressBar = findViewById(R.id.progress);
+        this.loginInput = findViewById(R.id.edit_user);
+        this.passwordInput = findViewById(R.id.edit_password);
+        this.enterButton = findViewById(R.id.button_login);
+        this.registerButton = findViewById(R.id.button_register);
 
-        enterButton.setOnClickListener((view) -> login());
-        registerButton.setOnClickListener((view) -> switchToReg());
+        this.enterButton.setOnClickListener((view) -> login());
+        this.registerButton.setOnClickListener((view) -> switchToReg());
 
     }
 
     protected void login() {
 
+        this.startProgress();
 
         //do login process
         String email = loginInput.getText().toString();
@@ -82,38 +89,6 @@ public class LogReg extends AppCompatActivity implements RegistrationFragment.On
 
         userHandler = UserApi.getInstance().authUser(user, listener);
 
-//        if (validator.validate(username, password)) {
-////            do login
-//            MyHttpClient.doResp("testUser123", "qwertyui", new Callback() {
-//
-//                @Override
-//                public void onFailure(@NonNull Call call, @NonNull IOException e) {
-//                    call.cancel();
-//                    System.out.println(e.getMessage() + "_____________message");
-//                    System.out.println("FAIL________________");
-//                    // вывести сообщение о проблемах с сетью
-//                }
-//
-//                @Override
-//                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-//                    System.out.println("SUCCESS______________");
-//                    if (response.body() != null) {
-//                        System.out.println(response.body().string());
-//                    }
-//                    // произвести проверку ответа
-//
-//                    //move to other Activity
-//                    System.out.println(username + " " + password);
-//                    // не забыть отправить данные через экстра
-//                    // сохранить пользовательские данные в бд
-//                    Intent intent = new Intent(LogReg.this, NotesActivity.class);
-//                    intent.putExtra("username", username);
-//                    intent.putExtra("password", password);
-//                    startActivity(intent);
-//                }
-//
-//            });
-//        }
     }
 
     protected void switchToNotes() {
@@ -131,6 +106,18 @@ public class LogReg extends AppCompatActivity implements RegistrationFragment.On
         findViewById(R.id.main).setVisibility(View.INVISIBLE);
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+    protected void startProgress() {
+        this.progressBar.setVisibility(View.VISIBLE);
+        this.enterButton.setEnabled(false);
+        this.registerButton.setEnabled(false);
+    }
+
+    protected void stopProgress() {
+        this.progressBar.setVisibility(View.INVISIBLE);
+        this.enterButton.setEnabled(true);
+        this.registerButton.setEnabled(true);
     }
 
     @Override
