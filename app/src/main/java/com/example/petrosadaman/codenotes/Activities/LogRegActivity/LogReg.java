@@ -49,6 +49,7 @@ public class LogReg extends AppCompatActivity implements RegistrationFragment.On
     private EditText passwordInput;
     private Button enterButton;
     private Button registerButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,35 +80,35 @@ public class LogReg extends AppCompatActivity implements RegistrationFragment.On
 
         if (validator.validate(username, password)) {
             //do login
-            MyHttpClient.doResp("testUser123", "qwertyui", new Callback() {
-                @Override
-                public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                    call.cancel();
-                    System.out.println(e.getMessage() + "_____________message");
-                    System.out.println("FAIL________________");
-                    // вывести сообщение о проблемах с сетью
-                }
-
-                @Override
-                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                    System.out.println("SUCCESS______________");
-                    if (response.body() != null) {
-                        System.out.println(response.body().string());
-                    }
-                    // произвести проверку ответа
-
-                    //move to other Activity
-                    System.out.println(username + " " + password);
-                    // не забыть отправить данные через экстра
-                    // сохранить пользовательские данные в бд
-                    Intent intent = new Intent(LogReg.this, NotesActivity.class);
-                    intent.putExtra("username", username);
-                    intent.putExtra("password", password);
-                    startActivity(intent);
-                }
-            });
-
-
+//            MyHttpClient.doResp("testUser123", "qwertyui", new Callback() {
+//
+//                @Override
+//                public void onFailure(@NonNull Call call, @NonNull IOException e) {
+//                    call.cancel();
+//                    System.out.println(e.getMessage() + "_____________message");
+//                    System.out.println("FAIL________________");
+//                    // вывести сообщение о проблемах с сетью
+//                }
+//
+//                @Override
+//                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+//                    System.out.println("SUCCESS______________");
+//                    if (response.body() != null) {
+//                        System.out.println(response.body().string());
+//                    }
+//                    // произвести проверку ответа
+//
+//                    //move to other Activity
+//                    System.out.println(username + " " + password);
+//                    // не забыть отправить данные через экстра
+//                    // сохранить пользовательские данные в бд
+//                    Intent intent = new Intent(LogReg.this, NotesActivity.class);
+//                    intent.putExtra("username", username);
+//                    intent.putExtra("password", password);
+//                    startActivity(intent);
+//                }
+//
+//            });
         }
     }
 

@@ -18,6 +18,7 @@ import java.util.concurrent.Executors;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class UserApi {
 
@@ -42,6 +43,7 @@ public class UserApi {
     private UserApi() {
         final Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
                 .build();
         service = retrofit.create(UserService.class);
     }
@@ -68,9 +70,11 @@ public class UserApi {
                     }
 
                     final String body = responseBody.string();
+
                     invokeSuccess(handler, parseUser(body));
 
                 }
+
             } catch (IOException e) {
                 invokeFailure(handler, e);
             }
