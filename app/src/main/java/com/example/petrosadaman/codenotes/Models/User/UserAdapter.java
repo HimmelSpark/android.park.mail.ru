@@ -10,10 +10,12 @@ import com.google.gson.JsonSerializer;
 
 import java.lang.reflect.Type;
 
-public class UserAdapter implements JsonDeserializer<UserModel>, JsonSerializer<UserModel> {
+public class UserAdapter implements JsonSerializer<UserModel>, JsonDeserializer<UserModel> {
 
     @Override
     public UserModel deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+        //TODO написать десериалайзер!!!
+        System.out.println(json.toString());
         return null;
     }
 

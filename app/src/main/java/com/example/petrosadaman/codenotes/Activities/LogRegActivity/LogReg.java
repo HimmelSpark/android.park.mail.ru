@@ -4,10 +4,10 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,17 +15,12 @@ import android.widget.EditText;
 import com.example.petrosadaman.codenotes.Activities.NotesActivity.NotesActivity;
 import com.example.petrosadaman.codenotes.LoginManager;
 import com.example.petrosadaman.codenotes.LoginValidator;
+import com.example.petrosadaman.codenotes.Models.Message.MessageModel;
 import com.example.petrosadaman.codenotes.Models.User.UserModel;
 import com.example.petrosadaman.codenotes.NotesDAO.DBManager;
 import com.example.petrosadaman.codenotes.R;
 import com.example.petrosadaman.codenotes.Web.ListenerHandler;
 import com.example.petrosadaman.codenotes.Web.UserApi;
-
-import java.io.IOException;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
 
 public class LogReg extends AppCompatActivity implements RegistrationFragment.OnFragmentInteractionListener {
 
@@ -37,14 +32,23 @@ public class LogReg extends AppCompatActivity implements RegistrationFragment.On
     private ListenerHandler<UserApi.OnUserGetListener> userHandler;
 
     private UserApi.OnUserGetListener listener = new UserApi.OnUserGetListener() {
+
         @Override
-        public void onUserSuccess(final UserModel user) {
-            System.out.println(user.getUsername());
+        public void onUserSuccess(MessageModel message) {
+            System.out.println("ON_USER_SUCCESS: " + message.getMessage());
+            //TODO | проверить сообщение. Если удалось залогиниться, то сохранить пользователя в БД
+            //TODO | перекинуть на следующий активити, стерев из истории текущий активити
+            //TODO | переделать проверку сообщения через перечисления
+
+            if (message.getMessage().equals("SUCCESSFULLY_AUTHED")) {
+                switchToNotes();
+            }
         }
 
         @Override
-        public void onUserError(final Exception error) {
-            System.out.println(error.getMessage());
+        public void onUserError(Exception error) {
+            System.out.println("ON_USER_ERROR: " + error.getMessage());
+            //TODO написать логирование
         }
     };
 
@@ -52,6 +56,7 @@ public class LogReg extends AppCompatActivity implements RegistrationFragment.On
     private EditText passwordInput;
     private Button enterButton;
     private Button registerButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,47 +80,54 @@ public class LogReg extends AppCompatActivity implements RegistrationFragment.On
 
 
         //do login process
-        String username = loginInput.getText().toString();
+        String email = loginInput.getText().toString();
         String password = passwordInput.getText().toString();
 
         UserModel user = new UserModel();
-        user.setUsername(username);
+        user.setEmail(email);
         user.setPassword(password);
 
-        userHandler = UserApi.getInstance().getUser(user, listener);
+        userHandler = UserApi.getInstance().authUser(user, listener);
 
-        if (validator.validate(username, password)) {
-            //do login
-            MyHttpClient.doResp("testUser123", "qwertyui", new Callback() {
-                @Override
-                public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                    call.cancel();
-                    System.out.println(e.getMessage() + "_____________message");
-                    System.out.println("FAIL________________");
-                    // вывести сообщение о проблемах с сетью
-                }
+//        if (validator.validate(username, password)) {
+////            do login
+//            MyHttpClient.doResp("testUser123", "qwertyui", new Callback() {
+//
+//                @Override
+//                public void onFailure(@NonNull Call call, @NonNull IOException e) {
+//                    call.cancel();
+//                    System.out.println(e.getMessage() + "_____________message");
+//                    System.out.println("FAIL________________");
+//                    // вывести сообщение о проблемах с сетью
+//                }
+//
+//                @Override
+//                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+//                    System.out.println("SUCCESS______________");
+//                    if (response.body() != null) {
+//                        System.out.println(response.body().string());
+//                    }
+//                    // произвести проверку ответа
+//
+//                    //move to other Activity
+//                    System.out.println(username + " " + password);
+//                    // не забыть отправить данные через экстра
+//                    // сохранить пользовательские данные в бд
+//                    Intent intent = new Intent(LogReg.this, NotesActivity.class);
+//                    intent.putExtra("username", username);
+//                    intent.putExtra("password", password);
+//                    startActivity(intent);
+//                }
+//
+//            });
+//        }
+    }
 
-                @Override
-                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                    System.out.println("SUCCESS______________");
-                    if (response.body() != null) {
-                        System.out.println(response.body().string());
-                    }
-                    // произвести проверку ответа
-
-                    //move to other Activity
-                    System.out.println(username + " " + password);
-                    // не забыть отправить данные через экстра
-                    // сохранить пользовательские данные в бд
-                    Intent intent = new Intent(LogReg.this, NotesActivity.class);
-                    intent.putExtra("username", username);
-                    intent.putExtra("password", password);
-                    startActivity(intent);
-                }
-            });
-
-
-        }
+    protected void switchToNotes() {
+        Intent intent = new Intent(LogReg.this, NotesActivity.class);
+//        intent.putExtra("username", username);
+//        intent.putExtra("password", password);
+        startActivity(intent);
     }
 
     protected void switchToReg() {
