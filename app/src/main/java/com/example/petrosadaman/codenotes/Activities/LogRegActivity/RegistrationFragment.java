@@ -3,12 +3,21 @@ package com.example.petrosadaman.codenotes.Activities.LogRegActivity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
+import com.example.petrosadaman.codenotes.Models.Message.MessageModel;
+import com.example.petrosadaman.codenotes.Models.User.UserModel;
 import com.example.petrosadaman.codenotes.R;
+import com.example.petrosadaman.codenotes.Web.ListenerHandler;
+import com.example.petrosadaman.codenotes.Web.UserApi;
+
+import java.util.Objects;
 
 
 /**
@@ -30,6 +39,35 @@ public class RegistrationFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    private ListenerHandler<UserApi.OnUserGetListener> userHandler;
+    private UserApi.OnUserGetListener listener = new UserApi.OnUserGetListener() {
+
+        @Override
+        public void onUserSuccess(MessageModel message) {
+            System.out.println("ON_USER_SUCCESS: " + message.getMessage());
+            //TODO | проверить сообщение. Если удалось залогиниться, то сохранить пользователя в БД
+            //TODO | перекинуть на следующий активити, стерев из истории текущий активити
+            //TODO | переделать проверку сообщения через перечисления
+
+            if (message.getMessage().equals("SUCCESSFULLY_REGISTERED")) {
+                ((LogReg) Objects.requireNonNull(getActivity())).switchToNotes();
+            }
+        }
+
+        @Override
+        public void onUserError(Exception error) {
+            System.out.println("ON_USER_ERROR: " + error.getMessage());
+            //TODO написать логирование
+        }
+    };
+
+    // Fragment Elements
+    private EditText login;
+    private EditText password;
+    private EditText confirm;
+    private Button registerButton;
+
 
     public RegistrationFragment() {
         // Required empty public constructor
@@ -56,18 +94,47 @@ public class RegistrationFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_registration, container, false);
+        View view = inflater.inflate(R.layout.fragment_registration, container, false);
+        this.login = view.findViewById(R.id.edit_user);
+        this.password = view.findViewById(R.id.edit_password);
+        this.confirm = view.findViewById(R.id.edit_confirm_password);
+        this.registerButton = view.findViewById(R.id.button_login);
+
+        this.registerButton.setOnClickListener((v) -> doRegister());
+        return view;
     }
+
+    private void doRegister() {
+
+        final String login = this.login.getText().toString();
+        final String password = this.password.getText().toString();
+        final String confirm = this.confirm.getText().toString();
+
+        if (!password.equals(confirm)) {
+            //TODO вывести сообщение об ошибке
+            return;
+        }
+
+        UserModel user = new UserModel();
+        user.setEmail(login);
+        user.setUsername(login);
+        user.setPassword(password);
+
+        userHandler = UserApi.getInstance().regUser(user, listener);
+    }
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {

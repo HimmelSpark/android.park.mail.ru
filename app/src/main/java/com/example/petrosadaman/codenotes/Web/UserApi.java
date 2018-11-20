@@ -23,9 +23,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class UserApi {
 
+    // Base URL should end with '/' symbol !!!
     private static final String BASE_URL = "http://178.128.138.0:8080/users/";
-
-//    private static final String BASE_URL = "https://requestbin.jumio.com/tbhhzktb/";
+//    private static final String BASE_URL = "http://requestbin.fullcontact.com/ql3wkcql/";
 
     private static final UserApi INSTANCE = new UserApi();
 
@@ -67,6 +67,44 @@ public class UserApi {
                     System.out.println("CODE____________" + response.toString());
 
                     if (response.code() != 200) {
+                        throw new IOException("HTTP code " + response.code());
+                    }
+
+                    if (responseBody == null) {
+                        throw new IOException("Empty body body");
+                    }
+
+                    final String body = responseBody.string();
+
+                    invokeSuccess(handler, parseMessage(body));
+
+                }
+
+            } catch (IOException e) {
+                invokeFailure(handler, e);
+            }
+        });
+
+        return handler;
+    }
+
+    public ListenerHandler<OnUserGetListener> regUser(final UserModel user, final OnUserGetListener listener) {
+
+        final ListenerHandler<OnUserGetListener> handler = new ListenerHandler<>(listener);
+
+        executor.execute(() -> {
+
+            try {
+
+                final Response<ResponseBody> response = service.regUser(user).execute();
+
+                try (final ResponseBody responseBody = response.body()) {
+
+                    System.out.println("CODE____________" + response.toString());
+
+                    if (response.code() >= 300) {
+                        //TODO | при ошибке тоже возвращается код, надо его принимать, чтобы узнать, что произошло на беке
+                        //TODO | либо интерпретировать код ошибки
                         throw new IOException("HTTP code " + response.code());
                     }
 
