@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.petrosadaman.codenotes.Models.Note.NoteModel;
 import com.example.petrosadaman.codenotes.R;
 
 import java.util.ArrayList;
@@ -15,15 +16,15 @@ import java.util.List;
 
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHolder> {
 
-    private List<Note> noteList = new ArrayList<>();
+    private List<NoteModel> noteList = new ArrayList<>();
     private OnItemClickListener itemClickListener;
 
-    public void setItems(Collection<Note> notes) {
+    public void setItems(Collection<NoteModel> notes) {
         noteList.addAll(notes);
         notifyDataSetChanged();
     }
 
-    public void addItem(Note note) {
+    public void addItem(NoteModel note) {
         noteList.add(note);
         notifyDataSetChanged();
     }
@@ -55,6 +56,10 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
         return noteList.size();
     }
 
+    public String getBody(int index) {
+        return noteList.get(index).getBody();
+    }
+
     public interface OnItemClickListener {
         void onClick(View view, int position);
     }
@@ -70,9 +75,9 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
             textView = itemView.findViewById(R.id.tv_item);
         }
 
-        void bind(Note note) {
-            textView.setText(note.getData());
-            textView.setVisibility(note.getData() != null ? View.VISIBLE : View.GONE);
+        void bind(NoteModel note) {
+            textView.setText(note.getTitle());
+            textView.setVisibility(note.getTitle() != null ? View.VISIBLE : View.GONE);
         }
 
 

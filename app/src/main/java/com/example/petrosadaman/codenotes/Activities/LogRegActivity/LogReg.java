@@ -6,17 +6,14 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import com.example.petrosadaman.codenotes.Activities.NotesActivity.NotesActivity;
 import com.example.petrosadaman.codenotes.LoginManager;
 import com.example.petrosadaman.codenotes.LoginValidator;
 import com.example.petrosadaman.codenotes.Models.Message.MessageModel;
-import com.example.petrosadaman.codenotes.Models.User.UserModel;
 import com.example.petrosadaman.codenotes.R;
 import com.example.petrosadaman.codenotes.Web.ListenerHandler;
 import com.example.petrosadaman.codenotes.Web.UserApi;
@@ -26,68 +23,27 @@ public class LogReg extends AppCompatActivity implements RegistrationFragment.On
     private final LoginValidator validator = new LoginValidator();
     private final LoginManager manager = new LoginManager();
 
+    private ProgressBar progressBar;
+
 
     private ListenerHandler<UserApi.OnUserGetListener> userHandler;
 
-    private UserApi.OnUserGetListener listener = new UserApi.OnUserGetListener() {
-
-        @Override
-        public void onUserSuccess(MessageModel message) {
-            System.out.println("ON_USER_SUCCESS: " + message.getMessage());
-            //TODO | проверить сообщение. Если удалось залогиниться, то сохранить пользователя в БД
-            //TODO | перекинуть на следующий активити, стерев из истории текущий активити
-            //TODO | переделать проверку сообщения через перечисления
-
-            stopProgress();
-
-            if (message.getMessage().equals("SUCCESSFULLY_AUTHED")) {
-                switchToNotes();
-            }
-        }
-
-        @Override
-        public void onUserError(Exception error) {
-            stopProgress();
-            System.out.println("ON_USER_ERROR: " + error.getMessage());
-            //TODO написать логирование
-        }
-    };
-
-    private EditText loginInput;
-    private EditText passwordInput;
-    private Button enterButton;
-    private Button registerButton;
-    private ProgressBar progressBar;
-
+    //todo добавить в регистрацию стоп и старт. в активити не получилось, потому что требуется доступ к кнопкам, который в фрагментах
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_log_reg);
-
+        setContentView(R.layout.activiti_log_registr);
         progressBar = findViewById(R.id.progress);
-        this.loginInput = findViewById(R.id.edit_user);
-        this.passwordInput = findViewById(R.id.edit_password);
-        this.enterButton = findViewById(R.id.button_login);
-        this.registerButton = findViewById(R.id.button_register);
 
-        this.enterButton.setOnClickListener((view) -> login());
-        this.registerButton.setOnClickListener((view) -> switchToReg());
 
-    }
+        final FragmentManager fragmentManager = getSupportFragmentManager();
+        final FragmentTransaction transaction = fragmentManager.beginTransaction();
+        LoginFragment loginFragment = new LoginFragment();
 
-    protected void login() {
+        transaction.replace(R.id.log_reg_container, loginFragment);
 
-        this.startProgress();
+        transaction.commit();
 
-        //do login process
-        String email = loginInput.getText().toString();
-        String password = passwordInput.getText().toString();
-
-        UserModel user = new UserModel();
-        user.setEmail(email);
-        user.setPassword(password);
-
-        userHandler = UserApi.getInstance().authUser(user, listener);
 
     }
 
@@ -96,28 +52,6 @@ public class LogReg extends AppCompatActivity implements RegistrationFragment.On
 //        intent.putExtra("username", username);
 //        intent.putExtra("password", password);
         startActivity(intent);
-    }
-
-    protected void switchToReg() {
-        final FragmentManager fragmentManager = getSupportFragmentManager();
-        final FragmentTransaction transaction = fragmentManager.beginTransaction();
-        RegistrationFragment rf = new RegistrationFragment();
-        transaction.replace(R.id.container, rf);
-        findViewById(R.id.main).setVisibility(View.INVISIBLE);
-        transaction.addToBackStack(null);
-        transaction.commit();
-    }
-
-    protected void startProgress() {
-        this.progressBar.setVisibility(View.VISIBLE);
-        this.enterButton.setEnabled(false);
-        this.registerButton.setEnabled(false);
-    }
-
-    protected void stopProgress() {
-        this.progressBar.setVisibility(View.INVISIBLE);
-        this.enterButton.setEnabled(true);
-        this.registerButton.setEnabled(true);
     }
 
     @Override
@@ -136,6 +70,6 @@ public class LogReg extends AppCompatActivity implements RegistrationFragment.On
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        findViewById(R.id.main).setVisibility(View.VISIBLE);
+//        findViewById(R.id.main).setVisibility(View.VISIBLE);
     }
 }

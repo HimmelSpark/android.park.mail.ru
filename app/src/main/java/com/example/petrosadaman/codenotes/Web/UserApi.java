@@ -5,6 +5,8 @@ import android.os.Looper;
 import android.util.Log;
 
 import com.example.petrosadaman.codenotes.Models.Message.MessageModel;
+import com.example.petrosadaman.codenotes.Models.Note.NoteModel;
+import com.example.petrosadaman.codenotes.Models.Note.NoteService;
 import com.example.petrosadaman.codenotes.Models.User.UserAdapter;
 import com.example.petrosadaman.codenotes.Models.User.UserModel;
 import com.example.petrosadaman.codenotes.Models.User.UserService;
@@ -25,7 +27,8 @@ public class UserApi {
 
     // Base URL should end with '/' symbol !!!
     private static final String BASE_URL = "http://178.128.138.0:8080/users/";
-//    private static final String BASE_URL = "http://requestbin.fullcontact.com/ql3wkcql/";
+//    private static final String BASE_URL = "http://requestbin.fullcontact.com/uhoyh9uh/";
+//    private static final String BASE_URL = "http://127.0.0.1:8080/users/";
 
     private static final UserApi INSTANCE = new UserApi();
 
@@ -39,7 +42,7 @@ public class UserApi {
 
     private final Executor executor = Executors.newSingleThreadExecutor();
 
-    private final UserService service;
+    private final UserService userService;
 
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
 
@@ -48,7 +51,7 @@ public class UserApi {
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        service = retrofit.create(UserService.class);
+        userService = retrofit.create(UserService.class);
     }
 
     public static UserApi getInstance() {
@@ -59,65 +62,43 @@ public class UserApi {
         final ListenerHandler<OnUserGetListener> handler = new ListenerHandler<>(listener);
         executor.execute(() -> {
             try {
-
-                final Response<ResponseBody> response = service.getUser(user).execute();
-
+                final Response<ResponseBody> response = userService.getUser(user).execute();
                 try (final ResponseBody responseBody = response.body()) {
-
                     System.out.println("CODE____________" + response.toString());
-
                     if (response.code() != 200) {
                         throw new IOException("HTTP code " + response.code());
                     }
-
                     if (responseBody == null) {
                         throw new IOException("Empty body body");
                     }
-
                     final String body = responseBody.string();
-
                     invokeSuccess(handler, parseMessage(body));
-
                 }
-
             } catch (IOException e) {
                 invokeFailure(handler, e);
             }
         });
-
         return handler;
     }
 
     public ListenerHandler<OnUserGetListener> regUser(final UserModel user, final OnUserGetListener listener) {
-
         final ListenerHandler<OnUserGetListener> handler = new ListenerHandler<>(listener);
-
         executor.execute(() -> {
-
             try {
-
-                final Response<ResponseBody> response = service.regUser(user).execute();
-
+                final Response<ResponseBody> response = userService.regUser(user).execute();
                 try (final ResponseBody responseBody = response.body()) {
-
                     System.out.println("CODE____________" + response.toString());
-
                     if (response.code() >= 300) {
                         //TODO | при ошибке тоже возвращается код, надо его принимать, чтобы узнать, что произошло на беке
                         //TODO | либо интерпретировать код ошибки
                         throw new IOException("HTTP code " + response.code());
                     }
-
                     if (responseBody == null) {
                         throw new IOException("Empty body body");
                     }
-
                     final String body = responseBody.string();
-
                     invokeSuccess(handler, parseMessage(body));
-
                 }
-
             } catch (IOException e) {
                 invokeFailure(handler, e);
             }
