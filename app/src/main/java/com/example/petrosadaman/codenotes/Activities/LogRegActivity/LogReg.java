@@ -17,7 +17,7 @@ import com.example.petrosadaman.codenotes.LoginManager;
 import com.example.petrosadaman.codenotes.LoginValidator;
 import com.example.petrosadaman.codenotes.Models.Message.MessageModel;
 import com.example.petrosadaman.codenotes.Models.User.UserModel;
-import com.example.petrosadaman.codenotes.NotesDAO.DBManager;
+//import com.example.petrosadaman.codenotes.NotesDAO.DBManager;
 import com.example.petrosadaman.codenotes.R;
 import com.example.petrosadaman.codenotes.Web.ListenerHandler;
 import com.example.petrosadaman.codenotes.Web.UserApi;
@@ -61,8 +61,8 @@ public class LogReg extends AppCompatActivity implements RegistrationFragment.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final DBManager manager;
-        manager.Мих
+//        final DBManager manager;
+//        manager.Мих
 
         setContentView(R.layout.activity_log_reg);
 
