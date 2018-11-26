@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 
-import com.example.petrosadaman.codenotes.Activities.NotesActivity.Note;
 import com.example.petrosadaman.codenotes.Models.Note.NoteModel;
 import com.example.petrosadaman.codenotes.Models.User.UserModel;
 
@@ -159,6 +158,13 @@ public class DBManager extends SQLiteOpenHelper {
         // updating row
         return db.update("notes", values, "id" + " = ?",
                 new String[]{String.valueOf(note.getId())});
+    }
+
+    public void deleteNote(NoteModel note) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("notes", "id = ?",
+                new String[]{String.valueOf(note.getId())});
+        db.close();
     }
 
 }

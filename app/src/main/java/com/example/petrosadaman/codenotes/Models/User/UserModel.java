@@ -12,7 +12,7 @@ public class UserModel {
     private String password = "";
 
     public static final String CREATE_TABLE =
-            "CREATE TABLE  users ( id INTEGER PRIMARY KEY AUTOINCREMENT," +
+            "CREATE TABLE IF NOT EXISTS  users ( id INTEGER PRIMARY KEY AUTOINCREMENT," +
                     " username CHAR(256), email CHAR(256), password TEXT "
                     + ")";
 

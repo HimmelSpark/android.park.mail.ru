@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.petrosadaman.codenotes.DBManager.DBManager;
 import com.example.petrosadaman.codenotes.Models.Message.MessageModel;
 import com.example.petrosadaman.codenotes.Models.User.UserModel;
 import com.example.petrosadaman.codenotes.R;
@@ -39,6 +40,7 @@ public class RegistrationFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    private DBManager db;
 
     private ListenerHandler<UserApi.OnUserGetListener> userHandler;
     private UserApi.OnUserGetListener listener = new UserApi.OnUserGetListener() {
@@ -54,6 +56,7 @@ public class RegistrationFragment extends Fragment {
 
             if (message.getMessage().equals("SUCCESSFULLY_REGISTERED")) {
                 ((LogReg) Objects.requireNonNull(getActivity())).switchToNotes();
+
             }
         }
 
@@ -92,6 +95,10 @@ public class RegistrationFragment extends Fragment {
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    public void setDB(DBManager db){
+        this.db = db;
     }
 
     @Override
@@ -141,8 +148,9 @@ public class RegistrationFragment extends Fragment {
         user.setEmail(login);
         user.setUsername(login);
         user.setPassword(password);
-
-        userHandler = UserApi.getInstance().regUser(user, listener);
+        UserApi some = UserApi.getInstance();
+        some.setDB(db);
+        userHandler = some.regUser(user, listener);
     }
 
 

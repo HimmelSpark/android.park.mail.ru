@@ -4,6 +4,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
+import com.example.petrosadaman.codenotes.DBManager.DBManager;
 import com.example.petrosadaman.codenotes.Models.Message.MessageModel;
 import com.example.petrosadaman.codenotes.Models.Note.NoteModel;
 import com.example.petrosadaman.codenotes.Models.Note.NoteService;
@@ -25,11 +26,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class UserApi {
 
+//    private DBManager db = new DBManager(this);
     // Base URL should end with '/' symbol !!!
     private static final String BASE_URL = "http://178.128.138.0:8080/users/";
 //    private static final String BASE_URL = "http://requestbin.fullcontact.com/uhoyh9uh/";
 //    private static final String BASE_URL = "http://127.0.0.1:8080/users/";
-
+    private DBManager db;
     private static final UserApi INSTANCE = new UserApi();
 
     /**
@@ -54,6 +56,11 @@ public class UserApi {
         userService = retrofit.create(UserService.class);
     }
 
+
+    public void  setDB(DBManager db){
+        this.db = db;
+    }
+
     public static UserApi getInstance() {
         return INSTANCE;
     }
@@ -65,6 +72,11 @@ public class UserApi {
                 final Response<ResponseBody> response = userService.getUser(user).execute();
                 try (final ResponseBody responseBody = response.body()) {
                     System.out.println("CODE____________" + response.toString());
+                    if (response.code() == 404) {
+                        if(!db.authorize(user.getUsername(), user.getPassword())) {
+                            throw new IOException("HTTP code " + response.code());
+                        }
+                    }
                     if (response.code() != 200) {
                         throw new IOException("HTTP code " + response.code());
                     }
@@ -97,6 +109,7 @@ public class UserApi {
                         throw new IOException("Empty body body");
                     }
                     final String body = responseBody.string();
+                    db.insertUser(user.getUsername(),user.getEmail(),user.getPassword());
                     invokeSuccess(handler, parseMessage(body));
                 }
             } catch (IOException e) {

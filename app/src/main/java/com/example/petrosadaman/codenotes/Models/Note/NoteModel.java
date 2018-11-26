@@ -15,7 +15,7 @@ public class NoteModel {
     private String timestamp = "";
 
     public static final String CREATE_TABLE =
-            "CREATE TABLE  notes ( id INTEGER PRIMARY KEY AUTOINCREMENT," +
+            "CREATE TABLE IF NOT EXISTS notes ( id INTEGER PRIMARY KEY AUTOINCREMENT," +
                     " author CHAR(256), title CHAR(256), body TEXT," +
                     "timestamp DATETIME DEFAULT CURRENT_TIMESTAMP"
                     + ")";

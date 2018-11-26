@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
+import com.example.petrosadaman.codenotes.DBManager.DBManager;
 import com.example.petrosadaman.codenotes.Models.Message.MessageModel;
 import com.example.petrosadaman.codenotes.Models.User.UserModel;
 import com.example.petrosadaman.codenotes.R;
@@ -29,7 +30,11 @@ public class LoginFragment extends Fragment {
     private ProgressBar progressBar;
     private LogReg logReg;
     private ListenerHandler<UserApi.OnUserGetListener> userHandler;
+    private DBManager db;
 
+    public void setDB(DBManager db){
+        this.db = db;
+    }
 
     public UserApi.OnUserGetListener listener = new UserApi.OnUserGetListener() {
 
@@ -86,8 +91,9 @@ public class LoginFragment extends Fragment {
         UserModel user = new UserModel();
         user.setEmail(email);
         user.setPassword(password);
-
-        userHandler = UserApi.getInstance().authUser(user, listener);
+        UserApi some =  UserApi.getInstance();
+        some.setDB(db);
+        userHandler =some.authUser(user, listener);
 
     }
 
@@ -106,6 +112,7 @@ public class LoginFragment extends Fragment {
     protected void switchToReg() {
         final FragmentTransaction transaction = getFragmentManager().beginTransaction();
         RegistrationFragment rf = new RegistrationFragment();
+        rf.setDB(db);
         transaction.replace(R.id.log_reg_container, rf);
         transaction.addToBackStack(null);
         transaction.commit();

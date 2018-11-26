@@ -8,7 +8,13 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ProgressBar;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
+
+import com.example.petrosadaman.codenotes.DBManager.DBManager;
 import com.example.petrosadaman.codenotes.Activities.NotesActivity.NotesActivity;
 import com.example.petrosadaman.codenotes.LoginManager;
 import com.example.petrosadaman.codenotes.LoginValidator;
@@ -23,7 +29,7 @@ public class LogReg extends AppCompatActivity implements RegistrationFragment.On
 
     private final LoginValidator validator = new LoginValidator();
     private final LoginManager manager = new LoginManager();
-    public SQLiteDatabase nodesDB;
+    public DBManager dbManager;
 
     private ProgressBar progressBar;
 
@@ -35,19 +41,15 @@ public class LogReg extends AppCompatActivity implements RegistrationFragment.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final DBManager manager = new DBManager();
-        manager.createDatabase();
-
-
-        setContentView(R.layout.activity_log_reg);
-//        progressBar = findViewById(R.id.progress);
-
+        setContentView(R.layout.activiti_log_registr);
+        progressBar = findViewById(R.id.progress);
+        dbManager = new DBManager(this);
 
         final FragmentManager fragmentManager = getSupportFragmentManager();
         final FragmentTransaction transaction = fragmentManager.beginTransaction();
         LoginFragment loginFragment = new LoginFragment();
-
-//        transaction.replace(R.id.log_reg_container, loginFragment);
+        loginFragment.setDB(dbManager);
+        transaction.replace(R.id.log_reg_container, loginFragment);
 
         transaction.commit();
 
