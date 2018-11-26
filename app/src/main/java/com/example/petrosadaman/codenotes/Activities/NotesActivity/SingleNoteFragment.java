@@ -24,8 +24,12 @@ public class SingleNoteFragment extends Fragment {
         if (view.getParent() != null) {
             ((ViewGroup)view.getParent()).removeView(view);
         }
-
         editor = view.findViewById(R.id.note_editor);
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            editor.setText(bundle.getString("body"));
+        }
         editor.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

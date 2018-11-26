@@ -50,6 +50,8 @@ public class RegistrationFragment extends Fragment {
             //TODO | перекинуть на следующий активити, стерев из истории текущий активити
             //TODO | переделать проверку сообщения через перечисления
 
+//            ((LogReg) Objects.requireNonNull(getActivity())).stopProgress();
+
             if (message.getMessage().equals("SUCCESSFULLY_REGISTERED")) {
                 ((LogReg) Objects.requireNonNull(getActivity())).switchToNotes();
             }
@@ -57,6 +59,7 @@ public class RegistrationFragment extends Fragment {
 
         @Override
         public void onUserError(Exception error) {
+//            ((LogReg) Objects.requireNonNull(getActivity())).stopProgress();
             System.out.println("ON_USER_ERROR: " + error.getMessage());
             //TODO написать логирование
         }
@@ -113,10 +116,16 @@ public class RegistrationFragment extends Fragment {
         this.registerButton = view.findViewById(R.id.button_login);
 
         this.registerButton.setOnClickListener((v) -> doRegister());
+
+        if (view.getParent() != null) {
+            ((ViewGroup)view.getParent()).removeView(view);
+        }
         return view;
     }
 
     private void doRegister() {
+
+//        ((LogReg) Objects.requireNonNull(getActivity())).startProgress();
 
         final String login = this.login.getText().toString();
         final String password = this.password.getText().toString();
@@ -124,6 +133,7 @@ public class RegistrationFragment extends Fragment {
 
         if (!password.equals(confirm)) {
             //TODO вывести сообщение об ошибке
+//            ((LogReg) Objects.requireNonNull(getActivity())).stopProgress();
             return;
         }
 

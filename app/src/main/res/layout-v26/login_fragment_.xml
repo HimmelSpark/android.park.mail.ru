@@ -6,11 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".Activities.LogRegActivity.LogReg">
 
-    <RelativeLayout
-        android:id="@+id/container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </RelativeLayout>
+    <!--<RelativeLayout-->
+        <!--android:id="@+id/container"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent">-->
+    <!--</RelativeLayout>-->
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/main"
@@ -90,5 +90,14 @@
             android:text="@string/register_button_label" />
 
     </RelativeLayout>
+
+    <ProgressBar
+        android:id="@+id/progress"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:visibility="invisible"
+        android:background="@color/progressColor"
+        tools:visibility="visible" />
 
 </android.support.constraint.ConstraintLayout>

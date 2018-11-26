@@ -15,7 +15,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.petrosadaman.codenotes.Activities.LogRegActivity.RegistrationFragment;
+import com.example.petrosadaman.codenotes.Models.Message.MessageModel;
+import com.example.petrosadaman.codenotes.Models.Note.NoteModel;
 import com.example.petrosadaman.codenotes.R;
+import com.example.petrosadaman.codenotes.Web.ListenerHandler;
+import com.example.petrosadaman.codenotes.Web.NoteApi;
+import com.example.petrosadaman.codenotes.Web.UserApi;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -27,6 +34,28 @@ public class NotesActivity extends AppCompatActivity
 
     private NotesAdapter notesAdapter;
     private List<Note> noteList;
+    private ListenerHandler<NoteApi.OnNoteGetListener> nodeHandler;
+
+    public NoteApi.OnNoteGetListener listener = new NoteApi.OnNoteGetListener() {
+        @Override
+        public void onNoteSuccess(List<NoteModel> notes) {
+            notesAdapter.setItems(notes);final FragmentManager fragmentManager = getSupportFragmentManager();
+            final FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+            NoteListFragment list = new NoteListFragment();
+            list.setNotesAdapter(notesAdapter);
+            transaction.replace(R.id.list_container, list);
+            if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+                transaction.replace(R.id.note_container,new SingleNoteFragment());
+            }
+            transaction.commit();
+        }
+
+        @Override
+        public void onNoteError(Exception error) {
+
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,53 +64,15 @@ public class NotesActivity extends AppCompatActivity
 
         notesAdapter = new NotesAdapter();
 
-
-        //TODO:: recyclerView через фрагмент не получилось добавить
-        //TODO:: пока что он вписан в layout данного activity
-        //TODO:: что за view принимает onItemClickListener?
-        //TODO:: использовать DifUtil, чтобы не пересоздавать весь список view при обновлении данных
-
-        loadNotes();
+        nodeHandler = NoteApi.getInstance().fetchNotes(listener);
         notesAdapter.setItemClickListener(this);
-        notesAdapter.setItems(noteList);
-
-        final FragmentManager fragmentManager = getSupportFragmentManager();
-        final FragmentTransaction transaction = fragmentManager.beginTransaction();
-
-        NoteListFragment list = new NoteListFragment();
-        list.setNotesAdapter(notesAdapter);
-        transaction.replace(R.id.list_container, list);
-        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
-            transaction.replace(R.id.note_container,new SingleNoteFragment());
-        }
-        transaction.commit();
-
     }
 
-    private void loadNotes() {
-        noteList = (getSomeNotes());
-    }
 
-    // Для тестирования!
-    private List<Note> getSomeNotes() {
-        return Arrays.asList(
-                new Note("Note1"),
-                new Note("Note2"),
-                new Note("Note3"),
-                new Note("Note4"),
-                new Note("Note5"),
-                new Note("Note6"),
-                new Note("Note7"),
-                new Note("Note8"),
-                new Note("Note9"),
-                new Note("Note10")
-        );
-    }
-
-    @Override
-    public void onBackPressed() {
-
-    }
+//    @Override
+//    public void onBackPressed() {
+//
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -132,9 +123,12 @@ public class NotesActivity extends AppCompatActivity
 
     @Override
     public void onClick(View view, int position) {
+        Bundle bundle = new Bundle();
+        bundle.putString("body", notesAdapter.getBody(position));
         final FragmentManager fragmentManager = getSupportFragmentManager();
         final FragmentTransaction transaction = fragmentManager.beginTransaction();
         SingleNoteFragment noteFragment = new SingleNoteFragment();
+        noteFragment.setArguments(bundle);
         if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             transaction.replace(R.id.list_container, noteFragment);
         }
