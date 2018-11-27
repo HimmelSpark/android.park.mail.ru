@@ -3,7 +3,11 @@
 
     <string name="header_log">Authorisation</string>
     <string name="header_reg">Registration</string>
+    <string name="header_note">New note</string>
     <string name="login_username_label">Username</string>
+    <string name="title">Title</string>
+    <string name="body">Body</string>
+    <string name="add">Save</string>
     <string name="login_username_input_placeholder">Enter username</string>
     <string name="login_password_label">Password</string>
     <string name="login_password_input_placeholder">Enter password</string>

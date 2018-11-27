@@ -87,19 +87,19 @@ public class NotesActivity extends AppCompatActivity
         setContentView(R.layout.activity_notes);
 
         fab = findViewById(R.id.fab);
-        fab.setOnClickListener(v ->
+        fab.setOnClickListener(v -> {
             Snackbar.make(v, "Here's a Snackbar", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
-                //TODO | пока создаём с одним и тем же названием
-                NoteModel note = new NoteModel();
-        );
+                    .setAction("Action", null).show();
+            //TODO | пока создаём с одним и тем же названием
+            NoteModel note = new NoteModel();
+        });
 
         notesAdapter = new NotesAdapter();
 
         nodeHandler = NoteApi.getInstance().fetchNotes(listener);
         notesAdapter.setItemClickListener(this);
-
     }
+
 
 
     @Override
