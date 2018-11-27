@@ -64,6 +64,26 @@ public class NotesActivity extends AppCompatActivity
 
         }
     };
+    public NoteApi.OnNoteCreateListener onNoteCreateListener = new NoteApi.OnNoteCreateListener() {
+        @Override
+        public void onMessageSuccess(MessageModel message) {
+            switch (message.getMessage()) {
+                case "SUCCESSFULLY_ADDED": {
+                    //TODO | создать заметку
+                    //TODO | добавить в ресайклер
+                    //TODO | перейти к редактированию заметки
+
+                }
+            }
+        }
+
+        @Override
+        public void onMessageError(Exception error) {
+            //TODO | тут уже прочекать ошибку
+            //TODO | может быть создать локально, записать в бд
+            //TODO | в бд к заметке выставить флаг Deferred
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +93,9 @@ public class NotesActivity extends AppCompatActivity
         fab = findViewById(R.id.fab);
         fab.setOnClickListener(v ->
             Snackbar.make(v, "Here's a Snackbar", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+                .setAction("Action", null).show();
+                //TODO | пока создаём с одним и тем же названием
+                NoteModel note = new NoteModel();
         );
 
         notesAdapter = new NotesAdapter();
@@ -82,14 +104,6 @@ public class NotesActivity extends AppCompatActivity
         notesAdapter.setItemClickListener(this);
 
     }
-
-
-
-
-//    @Override
-//    public void onBackPressed() {
-//
-//    }
 
 
     @Override

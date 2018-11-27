@@ -82,8 +82,8 @@ public class NoteApi {
         return handler;
     }
 
-    public ListenerHandler<NoteApi.OnMessageGetListener> createNote(final NoteModel noteModel, final NoteApi.OnMessageGetListener listener) {
-        final ListenerHandler<NoteApi.OnMessageGetListener> handler = new ListenerHandler<>(listener);
+    public ListenerHandler<OnNoteCreateListener> createNote(final NoteModel noteModel, final OnNoteCreateListener listener) {
+        final ListenerHandler<OnNoteCreateListener> handler = new ListenerHandler<>(listener);
         executor.execute(() -> {
             try {
                 final Response<ResponseBody> response = noteService.addNote(noteModel).execute();
@@ -136,10 +136,10 @@ public class NoteApi {
         });
     }
 
-    private void invokeSuccessMessage(ListenerHandler<NoteApi.OnMessageGetListener> handler, final MessageModel message) {
+    private void invokeSuccessMessage(ListenerHandler<OnNoteCreateListener> handler, final MessageModel message) {
         mainHandler.post(() -> {
             System.out.println("in invoke success! note");
-            NoteApi.OnMessageGetListener listener = handler.getListener();
+            OnNoteCreateListener listener = handler.getListener();
             if (listener!= null) {
                 Log.d("API", "listener NOT null");
                 listener.onMessageSuccess(message);
@@ -149,10 +149,10 @@ public class NoteApi {
         });
     }
 
-    private void invokeFailureMessage(ListenerHandler<NoteApi.OnMessageGetListener> handler, IOException e) {
+    private void invokeFailureMessage(ListenerHandler<OnNoteCreateListener> handler, IOException e) {
         mainHandler.post(() -> {
             System.out.println("in invoke failure! note");
-            NoteApi.OnMessageGetListener listener = handler.getListener();
+            OnNoteCreateListener listener = handler.getListener();
             if (listener != null) {
                 Log.d("API", "listener NOT null");
                 listener.onMessageError(e);
@@ -186,7 +186,7 @@ public class NoteApi {
             throw new IOException(e);
         }
     }
-    public interface OnMessageGetListener {
+    public interface OnNoteCreateListener {
         void onMessageSuccess(final MessageModel message);
 
         void onMessageError(final Exception error);
