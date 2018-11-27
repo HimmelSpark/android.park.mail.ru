@@ -4,6 +4,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
+import com.example.petrosadaman.codenotes.DBManager.DBManager;
 import com.example.petrosadaman.codenotes.Models.Message.MessageModel;
 import com.example.petrosadaman.codenotes.Models.Note.NoteListAdapter;
 import com.example.petrosadaman.codenotes.Models.Note.NoteModel;
@@ -31,6 +32,8 @@ public class NoteApi {
 
     private static final NoteApi INSTANCE = new NoteApi();
 
+    private DBManager db;
+
     /**
      * GSON достаточно тяжелый объект с долгой инициализацией. Не стоит создавать его каждый
      * раз для разбора JSON - имеет смысл переиспользовать объект.
@@ -57,7 +60,11 @@ public class NoteApi {
         return INSTANCE;
     }
 
-    public ListenerHandler<NoteApi.OnNoteGetListener> fetchNotes(final NoteApi.OnNoteGetListener listener) {
+    public void setDB(DBManager dab) {
+        this.db = dab;
+    }
+
+    public ListenerHandler<NoteApi.OnNoteGetListener> fetchNotes(final NoteApi.OnNoteGetListener listener, String user) {
         final ListenerHandler<NoteApi.OnNoteGetListener> handler = new ListenerHandler<>(listener);
         executor.execute(() -> {
             try {
@@ -76,14 +83,21 @@ public class NoteApi {
                     invokeSuccess(handler, listNotes);
                 }
             } catch (IOException e) {
-                invokeFailure(handler, e);
+                    try {
+                        List<NoteModel> lst= db.getAllNotes(user);
+                        System.out.print("Authed");
+                        invokeSuccess(handler, lst);
+                    }
+                    catch (Exception io){
+                        invokeFailure(handler, e);
+                    }
             }
         });
         return handler;
     }
 
-    public ListenerHandler<OnNoteCreateListener> createNote(final NoteModel noteModel, final OnNoteCreateListener listener) {
-        final ListenerHandler<OnNoteCreateListener> handler = new ListenerHandler<>(listener);
+    public ListenerHandler<NoteApi.OnNoteCreateListener> createNote(final NoteModel noteModel, final NoteApi.OnNoteCreateListener listener) {
+        final ListenerHandler<NoteApi.OnNoteCreateListener> handler = new ListenerHandler<>(listener);
         executor.execute(() -> {
             try {
                 final Response<ResponseBody> response = noteService.addNote(noteModel).execute();
@@ -136,10 +150,10 @@ public class NoteApi {
         });
     }
 
-    private void invokeSuccessMessage(ListenerHandler<OnNoteCreateListener> handler, final MessageModel message) {
+    private void invokeSuccessMessage(ListenerHandler<NoteApi.OnNoteCreateListener> handler, final MessageModel message) {
         mainHandler.post(() -> {
             System.out.println("in invoke success! note");
-            OnNoteCreateListener listener = handler.getListener();
+            NoteApi.OnNoteCreateListener listener = handler.getListener();
             if (listener!= null) {
                 Log.d("API", "listener NOT null");
                 listener.onMessageSuccess(message);
@@ -149,10 +163,10 @@ public class NoteApi {
         });
     }
 
-    private void invokeFailureMessage(ListenerHandler<OnNoteCreateListener> handler, IOException e) {
+    private void invokeFailureMessage(ListenerHandler<NoteApi.OnNoteCreateListener> handler, IOException e) {
         mainHandler.post(() -> {
             System.out.println("in invoke failure! note");
-            OnNoteCreateListener listener = handler.getListener();
+            NoteApi.OnNoteCreateListener listener = handler.getListener();
             if (listener != null) {
                 Log.d("API", "listener NOT null");
                 listener.onMessageError(e);

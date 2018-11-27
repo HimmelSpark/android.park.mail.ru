@@ -19,7 +19,9 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Button;
 
+import com.example.petrosadaman.codenotes.Activities.LogRegActivity.LogReg;
 import com.example.petrosadaman.codenotes.Activities.LogRegActivity.RegistrationFragment;
+import com.example.petrosadaman.codenotes.DBManager.DBManager;
 import com.example.petrosadaman.codenotes.Models.Message.MessageModel;
 import com.example.petrosadaman.codenotes.Models.Note.NoteModel;
 import com.example.petrosadaman.codenotes.R;
@@ -41,8 +43,14 @@ public class NotesActivity extends AppCompatActivity
     private NotesAdapter notesAdapter;
     private List<Note> noteList;
     private ListenerHandler<NoteApi.OnNoteGetListener> nodeHandler;
+    private ListenerHandler<NoteApi.OnNoteCreateListener> noteCreateHandler;
     private FloatingActionButton fab;
+
     private Dialog dialog;
+
+    private DBManager db = new DBManager(this);
+    private String user;
+
 
     public NoteApi.OnNoteGetListener listener = new NoteApi.OnNoteGetListener() {
         @Override
@@ -70,6 +78,7 @@ public class NotesActivity extends AppCompatActivity
         public void onMessageSuccess(MessageModel message) {
             switch (message.getMessage()) {
                 case "SUCCESSFULLY_ADDED": {
+//                    notesAdapter.addItem();
                     //TODO | создать заметку
                     //TODO | добавить в ресайклер
                     //TODO | перейти к редактированию заметки
@@ -96,42 +105,31 @@ public class NotesActivity extends AppCompatActivity
         // Передайте ссылку на разметку
         dialog.setContentView(R.layout.addnote);
 
-
+        user = this.getIntent().getExtras().getString("username");
         fab = findViewById(R.id.fab);
         fab.setOnClickListener(v -> {
             dialog.show();
             EditText titleInput = dialog.findViewById(R.id.edit_title);
             EditText bodyInput = dialog.findViewById(R.id.edit_body);
-            String title = titleInput.getText().toString();
-            String body = bodyInput.getText().toString();
+            String titlee = titleInput.getText().toString();
+            String bodyy = bodyInput.getText().toString();
 
             Button save = dialog.findViewById(R.id.button_save);
             save.setOnClickListener(vv -> {
-                NoteModel note = new NoteModel();
-                note.setAuthor("supreme");
+                NoteModel notee = new NoteModel();
+                notee.setAuthor("string");
                 NoteApi some =  NoteApi.getInstance();
-//                some.setDB(db);
-                userHandler =some.authUser(user, listener);
+                some.setDB(db);
+                noteCreateHandler = NoteApi.getInstance().createNote(notee, onNoteCreateListener);
+
             });
-//            NoteModel note = new NoteModel();
-//            //TODO вызвать dialog и вытащить title нового note
-//            // Пока создаём с одним и тем же названием
-//            String title = "some title";
-//            //TODO ___________________________________________
-//
-//            note.setAuthor("adam404pet@gmail.com");
-//            note.setTitle(title + (notesAdapter.getItemCount() + 1));
-//            note.setBody("empty body: " + (notesAdapter.getItemCount() + 1));
-//            note.setTimestamp((new Timestamp(System.currentTimeMillis())).toString());
-//            notesAdapter.addItem(note);
-//            int pos = notesAdapter.getItemCount() - 1;
-//            onClick(v, pos);
 
         });
 
         notesAdapter = new NotesAdapter();
 
-        nodeHandler = NoteApi.getInstance().fetchNotes(listener);
+        NoteApi.getInstance().setDB(db);
+        nodeHandler = NoteApi.getInstance().fetchNotes(listener, user);
         notesAdapter.setItemClickListener(this);
     }
 

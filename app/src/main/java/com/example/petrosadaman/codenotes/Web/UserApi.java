@@ -90,7 +90,7 @@ public class UserApi {
             } catch (IOException e) {
                 if(db.authorize(user.getEmail(), user.getPassword())) {
                     System.out.print("Authed");
-                    invokeSuccess(handler, new MessageModel("SUCCESSFULLY_AUTHED"));
+                    invokeSuccess(handler, new MessageModel(user.getEmail()));
                 }
                 else {
                     invokeFailure(handler, e);
