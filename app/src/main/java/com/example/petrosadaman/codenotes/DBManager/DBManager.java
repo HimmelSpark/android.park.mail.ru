@@ -145,6 +145,9 @@ public class DBManager extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery,new String[]{username,password});
         cursor.moveToFirst();
+        if(cursor.getCount()==0){
+            return false;
+        }
         return password.equals(cursor.getString(cursor.getColumnIndex("password")));
 
     }
