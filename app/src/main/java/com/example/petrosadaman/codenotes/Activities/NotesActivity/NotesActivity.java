@@ -1,5 +1,6 @@
 package com.example.petrosadaman.codenotes.Activities.NotesActivity;
 
+import android.app.Dialog;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,6 +16,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.Button;
 
 import com.example.petrosadaman.codenotes.Activities.LogRegActivity.RegistrationFragment;
 import com.example.petrosadaman.codenotes.Models.Message.MessageModel;
@@ -24,6 +27,7 @@ import com.example.petrosadaman.codenotes.Web.ListenerHandler;
 import com.example.petrosadaman.codenotes.Web.NoteApi;
 import com.example.petrosadaman.codenotes.Web.UserApi;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -38,6 +42,7 @@ public class NotesActivity extends AppCompatActivity
     private List<Note> noteList;
     private ListenerHandler<NoteApi.OnNoteGetListener> nodeHandler;
     private FloatingActionButton fab;
+    private Dialog dialog;
 
     public NoteApi.OnNoteGetListener listener = new NoteApi.OnNoteGetListener() {
         @Override
@@ -68,7 +73,6 @@ public class NotesActivity extends AppCompatActivity
                     //TODO | создать заметку
                     //TODO | добавить в ресайклер
                     //TODO | перейти к редактированию заметки
-
                 }
             }
         }
@@ -86,12 +90,43 @@ public class NotesActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notes);
 
+        dialog = new Dialog(NotesActivity.this);
+        // Установите заголовок
+        dialog.setTitle("Тест укукуку");
+        // Передайте ссылку на разметку
+        dialog.setContentView(R.layout.addnote);
+
+
         fab = findViewById(R.id.fab);
         fab.setOnClickListener(v -> {
-            Snackbar.make(v, "Here's a Snackbar", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show();
-            //TODO | пока создаём с одним и тем же названием
-            NoteModel note = new NoteModel();
+            dialog.show();
+            EditText titleInput = dialog.findViewById(R.id.edit_title);
+            EditText bodyInput = dialog.findViewById(R.id.edit_body);
+            String title = titleInput.getText().toString();
+            String body = bodyInput.getText().toString();
+
+            Button save = dialog.findViewById(R.id.button_save);
+            save.setOnClickListener(vv -> {
+                NoteModel note = new NoteModel();
+                note.setAuthor("supreme");
+                NoteApi some =  NoteApi.getInstance();
+//                some.setDB(db);
+                userHandler =some.authUser(user, listener);
+            });
+//            NoteModel note = new NoteModel();
+//            //TODO вызвать dialog и вытащить title нового note
+//            // Пока создаём с одним и тем же названием
+//            String title = "some title";
+//            //TODO ___________________________________________
+//
+//            note.setAuthor("adam404pet@gmail.com");
+//            note.setTitle(title + (notesAdapter.getItemCount() + 1));
+//            note.setBody("empty body: " + (notesAdapter.getItemCount() + 1));
+//            note.setTimestamp((new Timestamp(System.currentTimeMillis())).toString());
+//            notesAdapter.addItem(note);
+//            int pos = notesAdapter.getItemCount() - 1;
+//            onClick(v, pos);
+
         });
 
         notesAdapter = new NotesAdapter();
