@@ -140,10 +140,11 @@ public class DBManager extends SQLiteOpenHelper {
 
     public Boolean authorize(String username, String password)
     {
-        String selectQuery = "SELECT  * FROM users WHERE username = ? OR email = ?  LIMIT 1";
+        String selectQuery = "SELECT * FROM users WHERE username = ? OR email = ?  LIMIT 1";
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery,new String[]{username,password});
+        cursor.moveToFirst();
         return password.equals(cursor.getString(cursor.getColumnIndex("password")));
 
     }
