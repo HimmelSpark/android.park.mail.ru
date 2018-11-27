@@ -1,35 +1,23 @@
 package com.example.petrosadaman.codenotes.Activities.LogRegActivity;
 
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ProgressBar;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 
 
 import com.example.petrosadaman.codenotes.DBManager.DBManager;
 import com.example.petrosadaman.codenotes.Activities.NotesActivity.NotesActivity;
-import com.example.petrosadaman.codenotes.LoginManager;
-import com.example.petrosadaman.codenotes.LoginValidator;
-import com.example.petrosadaman.codenotes.DBManager.DBManager;
 import com.example.petrosadaman.codenotes.R;
 import com.example.petrosadaman.codenotes.Web.ListenerHandler;
-import com.example.petrosadaman.codenotes.Web.NoteApi;
 import com.example.petrosadaman.codenotes.Web.UserApi;
-
-import java.util.Collection;
 
 public class LogReg extends AppCompatActivity implements RegistrationFragment.OnFragmentInteractionListener {
 
-    private final LoginValidator validator = new LoginValidator();
-    private final LoginManager manager = new LoginManager();
     public DBManager dbManager;
 
     private ProgressBar progressBar;
@@ -57,10 +45,9 @@ public class LogReg extends AppCompatActivity implements RegistrationFragment.On
 
     }
 
-    protected void switchToNotes() {
+    protected void switchToNotes(String username) {
         Intent intent = new Intent(LogReg.this, NotesActivity.class);
-//        intent.putExtra("username", username);
-//        intent.putExtra("password", password);
+        intent.putExtra("username", username);
         startActivity(intent);
     }
 

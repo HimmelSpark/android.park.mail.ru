@@ -40,8 +40,8 @@ public class NotesActivity extends AppCompatActivity
     private List<Note> noteList;
     private ListenerHandler<NoteApi.OnNoteGetListener> nodeHandler;
     private FloatingActionButton fab;
-    private DBManager db;
-
+    private DBManager db = new DBManager(this);
+    private String user;
 
     public NoteApi.OnNoteGetListener listener = new NoteApi.OnNoteGetListener() {
         @Override
@@ -89,18 +89,18 @@ public class NotesActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notes);
-
+        user = this.getIntent().getExtras().getString("username");
         fab = findViewById(R.id.fab);
-        fab.setOnClickListener(v ->
+        fab.setOnClickListener(v -> {
             Snackbar.make(v, "Here's a Snackbar", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
-                //TODO | пока создаём с одним и тем же названием
-                NoteModel note = new NoteModel();
-        );
-
+                    .setAction("Action", null).show();
+            //TODO | пока создаём с одним и тем же названием
+            NoteModel note = new NoteModel();
+        });
         notesAdapter = new NotesAdapter();
 
-        nodeHandler = NoteApi.getInstance().fetchNotes(listener);
+        NoteApi.getInstance().setDB(db);
+        nodeHandler = NoteApi.getInstance().fetchNotes(listener, user);
         notesAdapter.setItemClickListener(this);
 
     }

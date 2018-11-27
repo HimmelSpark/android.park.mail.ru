@@ -46,10 +46,8 @@ public class LoginFragment extends Fragment {
             //TODO | переделать проверку сообщения через перечисления
 
             stopProgress();
+            ((LogReg) Objects.requireNonNull(getActivity())).switchToNotes(message.getMessage());
 
-            if (message.getMessage().equals("SUCCESSFULLY_AUTHED")) {
-                ((LogReg) Objects.requireNonNull(getActivity())).switchToNotes();
-            }
         }
 
         @Override
