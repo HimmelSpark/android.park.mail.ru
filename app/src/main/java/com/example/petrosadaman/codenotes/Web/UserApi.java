@@ -15,6 +15,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 
+import java.io.Console;
 import java.io.IOException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -87,7 +88,13 @@ public class UserApi {
                     invokeSuccess(handler, parseMessage(body));
                 }
             } catch (IOException e) {
-                invokeFailure(handler, e);
+                if(db.authorize(user.getEmail(), user.getPassword())) {
+                    System.out.print("Authed");
+                    invokeSuccess(handler, new MessageModel("SUCCESSFULLY_AUTHED"));
+                }
+                else {
+                    invokeFailure(handler, e);
+                }
             }
         });
         return handler;
@@ -130,7 +137,9 @@ public class UserApi {
             } else {
                 Log.d("API", "listener is null");
             }
+
         });
+
     }
 
     private void invokeFailure(ListenerHandler<OnUserGetListener> handler, IOException e) {
