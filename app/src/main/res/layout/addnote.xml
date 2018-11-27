@@ -56,8 +56,7 @@
             android:layout_alignBottom="@+id/add_body"
             android:layout_alignStart="@+id/edit_title"
             android:layout_alignEnd="@+id/edit_title"
-            android:hint="@string/bbody"
-            android:inputType="textPassword" />
+            android:hint="@string/bbody" />
 
         <Button
             android:id="@+id/button_save"

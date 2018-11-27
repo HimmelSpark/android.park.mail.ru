@@ -78,7 +78,9 @@ public class NotesActivity extends AppCompatActivity
         public void onMessageSuccess(MessageModel message) {
             switch (message.getMessage()) {
                 case "SUCCESSFULLY_ADDED": {
+                    System.out.println(message.getMessage());
 //                    notesAdapter.addItem();
+
                     //TODO | создать заметку
                     //TODO | добавить в ресайклер
                     //TODO | перейти к редактированию заметки
@@ -109,19 +111,21 @@ public class NotesActivity extends AppCompatActivity
         fab = findViewById(R.id.fab);
         fab.setOnClickListener(v -> {
             dialog.show();
-            EditText titleInput = dialog.findViewById(R.id.edit_title);
-            EditText bodyInput = dialog.findViewById(R.id.edit_body);
-            String titlee = titleInput.getText().toString();
-            String bodyy = bodyInput.getText().toString();
 
             Button save = dialog.findViewById(R.id.button_save);
             save.setOnClickListener(vv -> {
+                EditText titleInput = dialog.findViewById(R.id.edit_title);
+                EditText bodyInput = dialog.findViewById(R.id.edit_body);
+                String titlee = titleInput.getText().toString();
+                String bodyy = bodyInput.getText().toString();
                 NoteModel notee = new NoteModel();
-                notee.setAuthor("string");
+                notee.setAuthor("supreme");
+                notee.setTitle(titlee);
+                notee.setBody(bodyy);
                 NoteApi some =  NoteApi.getInstance();
                 some.setDB(db);
                 noteCreateHandler = NoteApi.getInstance().createNote(notee, onNoteCreateListener);
-
+                notesAdapter.addItem(notee);
             });
 
         });

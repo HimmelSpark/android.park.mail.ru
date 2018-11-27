@@ -28,7 +28,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class NoteApi {
     // Base URL should end with '/' symbol !!!
     private static final String BASE_URL = "http://178.128.138.0:8080/users/";
-//    private static final String BASE_URL = "http://requestbin.fullcontact.com/uhoyh9uh/";
+//    private static final String BASE_URL = "http://requestbin.fullcontact.com/1ld9n2x1/";
 
     private static final NoteApi INSTANCE = new NoteApi();
 
