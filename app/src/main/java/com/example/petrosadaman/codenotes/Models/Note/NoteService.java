@@ -13,6 +13,7 @@ public interface NoteService {
 
     @GET("http://178.128.138.0:8080/users/notes/{username}/")
     Call<ResponseBody> getList(@Path("username") String username);
+
 //    @GET("http://localhost:8080/users/notes/{username}/")
 //    Call<ResponseBody> getList(@Path("username") String username);
 }

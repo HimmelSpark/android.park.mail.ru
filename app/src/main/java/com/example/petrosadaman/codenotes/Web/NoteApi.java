@@ -5,7 +5,6 @@ import android.os.Looper;
 import android.util.Log;
 
 import com.example.petrosadaman.codenotes.Models.Message.MessageModel;
-import com.example.petrosadaman.codenotes.Models.Note.NoteAdapter;
 import com.example.petrosadaman.codenotes.Models.Note.NoteListAdapter;
 import com.example.petrosadaman.codenotes.Models.Note.NoteModel;
 import com.example.petrosadaman.codenotes.Models.Note.NoteService;
@@ -69,16 +68,43 @@ public class NoteApi {
                         throw new IOException("HTTP code " + response.code());
                     }
                     if (responseBody == null) {
-                        System.out.println("Empty body body");
+                        System.out.println("Empty body");
                         throw new IOException("Empty body body");
                     }
                     final String body = responseBody.string();
-                    List<NoteModel> listNotes = parseMessage(body);
-                    System.out.println("aaaaaaaaa");
+                    List<NoteModel> listNotes = parseNotes(body);
                     invokeSuccess(handler, listNotes);
                 }
             } catch (IOException e) {
                 invokeFailure(handler, e);
+            }
+        });
+        return handler;
+    }
+
+    public ListenerHandler<NoteApi.OnMessageGetListener> createNote(final NoteModel noteModel, final NoteApi.OnMessageGetListener listener) {
+        final ListenerHandler<NoteApi.OnMessageGetListener> handler = new ListenerHandler<>(listener);
+        executor.execute(() -> {
+            try {
+                final Response<ResponseBody> response = noteService.addNote(noteModel).execute();
+                try (final ResponseBody responseBody = response.body()) {
+                    if (response.code() >= 300) {
+                        System.out.println("HTTP code " + response.code());
+                        throw new IOException("HTTP code " + response.code());
+                    }
+
+                    if (responseBody == null) {
+                        System.out.println("Empty body");
+                        throw new IOException("Empty body body");
+                    }
+
+                    final String body = responseBody.string();
+                    MessageModel message = parseMessage(body);
+                    invokeSuccessMessage(handler, message);
+
+                }
+            } catch (IOException e) {
+                invokeFailureMessage(handler, e);
             }
         });
         return handler;
@@ -110,7 +136,33 @@ public class NoteApi {
         });
     }
 
-    private List<NoteModel> parseMessage(final String body) throws IOException {
+    private void invokeSuccessMessage(ListenerHandler<NoteApi.OnMessageGetListener> handler, final MessageModel message) {
+        mainHandler.post(() -> {
+            System.out.println("in invoke success! note");
+            NoteApi.OnMessageGetListener listener = handler.getListener();
+            if (listener!= null) {
+                Log.d("API", "listener NOT null");
+                listener.onMessageSuccess(message);
+            } else {
+                Log.d("API", "listener is null");
+            }
+        });
+    }
+
+    private void invokeFailureMessage(ListenerHandler<NoteApi.OnMessageGetListener> handler, IOException e) {
+        mainHandler.post(() -> {
+            System.out.println("in invoke failure! note");
+            NoteApi.OnMessageGetListener listener = handler.getListener();
+            if (listener != null) {
+                Log.d("API", "listener NOT null");
+                listener.onMessageError(e);
+            } else {
+                Log.d("API", "listener is null");
+            }
+        });
+    }
+
+    private List<NoteModel> parseNotes(final String body) throws IOException {
         try {
             //todo:: просто жесть и замкнутый круг, пришлось исользовать новый gson в обход десериализатора
             Type listType = new TypeToken<List<NoteModel>>(){}.getType();
@@ -121,11 +173,22 @@ public class NoteApi {
             throw new IOException(e);
         }
     }
-
-
     public interface OnNoteGetListener {
         void onNoteSuccess(final List<NoteModel> note);
 
         void onNoteError(final Exception error);
+    }
+
+    private MessageModel parseMessage(final String body) throws IOException {
+        try {
+            return GSON.fromJson(body, MessageModel.class);
+        } catch (JsonSyntaxException e) {
+            throw new IOException(e);
+        }
+    }
+    public interface OnMessageGetListener {
+        void onMessageSuccess(final MessageModel message);
+
+        void onMessageError(final Exception error);
     }
 }

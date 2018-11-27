@@ -4,6 +4,8 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
@@ -35,11 +37,13 @@ public class NotesActivity extends AppCompatActivity
     private NotesAdapter notesAdapter;
     private List<Note> noteList;
     private ListenerHandler<NoteApi.OnNoteGetListener> nodeHandler;
+    private FloatingActionButton fab;
 
     public NoteApi.OnNoteGetListener listener = new NoteApi.OnNoteGetListener() {
         @Override
         public void onNoteSuccess(List<NoteModel> notes) {
-            notesAdapter.setItems(notes);final FragmentManager fragmentManager = getSupportFragmentManager();
+            notesAdapter.setItems(notes);
+            final FragmentManager fragmentManager = getSupportFragmentManager();
             final FragmentTransaction transaction = fragmentManager.beginTransaction();
 
             NoteListFragment list = new NoteListFragment();
@@ -62,17 +66,27 @@ public class NotesActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notes);
 
+        fab = findViewById(R.id.fab);
+        fab.setOnClickListener(v ->
+            Snackbar.make(v, "Here's a Snackbar", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show()
+        );
+
         notesAdapter = new NotesAdapter();
 
         nodeHandler = NoteApi.getInstance().fetchNotes(listener);
         notesAdapter.setItemClickListener(this);
+
     }
+
+
 
 
 //    @Override
 //    public void onBackPressed() {
 //
 //    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
