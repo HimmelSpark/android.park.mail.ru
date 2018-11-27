@@ -21,6 +21,7 @@ import com.example.petrosadaman.codenotes.LoginValidator;
 import com.example.petrosadaman.codenotes.DBManager.DBManager;
 import com.example.petrosadaman.codenotes.R;
 import com.example.petrosadaman.codenotes.Web.ListenerHandler;
+import com.example.petrosadaman.codenotes.Web.NoteApi;
 import com.example.petrosadaman.codenotes.Web.UserApi;
 
 import java.util.Collection;

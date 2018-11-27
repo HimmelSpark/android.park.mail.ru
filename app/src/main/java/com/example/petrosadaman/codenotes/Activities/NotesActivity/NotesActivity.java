@@ -16,7 +16,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.petrosadaman.codenotes.Activities.LogRegActivity.LogReg;
 import com.example.petrosadaman.codenotes.Activities.LogRegActivity.RegistrationFragment;
+import com.example.petrosadaman.codenotes.DBManager.DBManager;
 import com.example.petrosadaman.codenotes.Models.Message.MessageModel;
 import com.example.petrosadaman.codenotes.Models.Note.NoteModel;
 import com.example.petrosadaman.codenotes.R;
@@ -38,6 +40,8 @@ public class NotesActivity extends AppCompatActivity
     private List<Note> noteList;
     private ListenerHandler<NoteApi.OnNoteGetListener> nodeHandler;
     private FloatingActionButton fab;
+    private DBManager db;
+
 
     public NoteApi.OnNoteGetListener listener = new NoteApi.OnNoteGetListener() {
         @Override

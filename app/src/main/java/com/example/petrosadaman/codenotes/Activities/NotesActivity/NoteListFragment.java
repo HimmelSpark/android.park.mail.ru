@@ -25,7 +25,7 @@ public class NoteListFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-               View view = inflater.inflate(R.layout.notelist, container, false);
+        View view = inflater.inflate(R.layout.notelist, container, false);
         RecyclerView rv = view.findViewById(R.id.rv_notes);
         rv.setAdapter(notesAdapter);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
