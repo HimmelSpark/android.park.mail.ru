@@ -26,6 +26,7 @@ import com.example.petrosadaman.codenotes.Web.ListenerHandler;
 import com.example.petrosadaman.codenotes.Web.NoteApi;
 import com.example.petrosadaman.codenotes.Web.UserApi;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -72,7 +73,6 @@ public class NotesActivity extends AppCompatActivity
                     //TODO | создать заметку
                     //TODO | добавить в ресайклер
                     //TODO | перейти к редактированию заметки
-
                 }
             }
         }
@@ -96,13 +96,26 @@ public class NotesActivity extends AppCompatActivity
                     .setAction("Action", null).show();
             //TODO | пока создаём с одним и тем же названием
             NoteModel note = new NoteModel();
+            //TODO вызвать dialog и вытащить title нового note
+            // Пока создаём с одним и тем же названием
+            String title = "some title";
+            //TODO ___________________________________________
+
+            note.setAuthor("adam404pet@gmail.com");
+            note.setTitle(title + (notesAdapter.getItemCount() + 1));
+            note.setBody("empty body: " + (notesAdapter.getItemCount() + 1));
+            note.setTimestamp((new Timestamp(System.currentTimeMillis())).toString());
+            notesAdapter.addItem(note);
+            int pos = notesAdapter.getItemCount() - 1;
+            onClick(v, pos);
+
         });
+
         notesAdapter = new NotesAdapter();
 
         NoteApi.getInstance().setDB(db);
         nodeHandler = NoteApi.getInstance().fetchNotes(listener, user);
         notesAdapter.setItemClickListener(this);
-
     }
 
 
