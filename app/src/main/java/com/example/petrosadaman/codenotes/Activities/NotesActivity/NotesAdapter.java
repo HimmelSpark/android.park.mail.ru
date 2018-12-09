@@ -29,6 +29,10 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
         notifyDataSetChanged();
     }
 
+    public int getAdapterSize() {
+        return this.noteList.size();
+    }
+
     public void clearItems() {
         noteList.clear();
         notifyDataSetChanged();
@@ -65,7 +69,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
     }
 
 
-    class NoteViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    class NoteViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView textView;
 

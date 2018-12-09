@@ -33,6 +33,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class NotesActivity extends AppCompatActivity
         implements
@@ -51,6 +52,7 @@ public class NotesActivity extends AppCompatActivity
     private DBManager db = new DBManager(this);
     private String user;
 
+    SingleNoteFragment noteFragment;
 
     public NoteApi.OnNoteGetListener listener = new NoteApi.OnNoteGetListener() {
         @Override
@@ -107,7 +109,7 @@ public class NotesActivity extends AppCompatActivity
         // Передайте ссылку на разметку
         dialog.setContentView(R.layout.addnote);
 
-        user = this.getIntent().getExtras().getString("username");
+        user = Objects.requireNonNull(this.getIntent().getExtras()).getString("username");
         fab = findViewById(R.id.fab);
         fab.setOnClickListener(v -> {
             dialog.show();
@@ -115,19 +117,21 @@ public class NotesActivity extends AppCompatActivity
             Button save = dialog.findViewById(R.id.button_save);
             save.setOnClickListener(vv -> {
                 EditText titleInput = dialog.findViewById(R.id.edit_title);
-                EditText bodyInput = dialog.findViewById(R.id.edit_body);
+//                EditText bodyInput = dialog.findViewById(R.id.edit_body);
                 String titlee = titleInput.getText().toString();
-                String bodyy = bodyInput.getText().toString();
+//                String bodyy = bodyInput.getText().toString();
                 NoteModel notee = new NoteModel();
                 notee.setAuthor("supreme");
                 notee.setTitle(titlee);
-                notee.setBody(bodyy);
+                notee.setBody("");
                 NoteApi some =  NoteApi.getInstance();
                 some.setDB(db);
-                noteCreateHandler = NoteApi.getInstance().createNote(notee, onNoteCreateListener);
+//                noteCreateHandler = NoteApi.getInstance().createNote(notee, onNoteCreateListener);
                 notesAdapter.addItem(notee);
+                this.onClick(null , notesAdapter.getItemCount() - 1);
+//                notesAdapter.getCreatedItem()
+                dialog.dismiss();
             });
-
         });
 
         notesAdapter = new NotesAdapter();
@@ -192,18 +196,30 @@ public class NotesActivity extends AppCompatActivity
         bundle.putString("body", notesAdapter.getBody(position));
         final FragmentManager fragmentManager = getSupportFragmentManager();
         final FragmentTransaction transaction = fragmentManager.beginTransaction();
-        SingleNoteFragment noteFragment = new SingleNoteFragment();
+        noteFragment = new SingleNoteFragment();
         noteFragment.setArguments(bundle);
-        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             transaction.replace(R.id.list_container, noteFragment);
-        }
-        else {
+        } else {
             transaction.replace(R.id.note_container,noteFragment);
         }
         transaction.addToBackStack(null);
         transaction.commit();
     }
 
+    @Override
+    public void onBackPressed() {
+        String textToSave = this.noteFragment.getEditor().getText().toString();
+        NoteModel notee = new NoteModel();
+        notee.setAuthor("supreme");
+        notee.setTitle("some_title");
+        notee.setBody(textToSave);
+        NoteApi some =  NoteApi.getInstance();
+        some.setDB(db);
+        noteCreateHandler = NoteApi.getInstance().createNote(notee, onNoteCreateListener);
+        notesAdapter.addItem(notee);
+        super.onBackPressed();
+    }
 
     @Override
     public void onFragmentInteraction(Uri uri) {

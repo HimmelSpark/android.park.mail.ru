@@ -30,6 +30,7 @@ public class SingleNoteFragment extends Fragment {
         if (bundle != null) {
             editor.setText(bundle.getString("body"));
         }
+
         editor.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -49,6 +50,11 @@ public class SingleNoteFragment extends Fragment {
 
         return view;
     }
+
+    EditText getEditor() {
+        return this.editor;
+    }
+
 
     //TODO прописать установку данных и заливку при аттаче
 }
