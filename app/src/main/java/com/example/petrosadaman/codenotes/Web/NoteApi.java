@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.ResponseBody;
@@ -52,13 +53,26 @@ public class NoteApi {
 
     private NoteApi() {
 
-        OkHttpClient client = new OkHttpClient();
-        client.interceptors().add((chain) -> {
+        OkHttpClient client = new OkHttpClient.Builder().addInterceptor((chain) -> {
             Request newRequest = chain.request().newBuilder()
-                    .header("JSESSIONID", this.db.getDatabaseName()) //TODO тут надо подставить сессию из БД
+                    .header("JSESSIONID", this.db.getCurrentUser().getSessionID())
                     .build();
             return chain.proceed(newRequest);
-        });
+        }).build();
+
+
+
+//        try {
+//            client.interceptors().add((chain) -> {
+//                Request newRequest = chain.request().newBuilder()
+//                        .header("JSESSIONID", this.db.getCurrentUser().getSessionID())
+//                        .build();
+//                return chain.proceed(newRequest);
+//            });
+//        } catch (Exception e) {
+//            String message = e.getMessage();
+//            System.out.println(e.getMessage());
+//        }
 
 
         final Retrofit retrofit = new Retrofit.Builder()

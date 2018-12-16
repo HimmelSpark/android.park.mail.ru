@@ -72,7 +72,7 @@ public class DBManager extends SQLiteOpenHelper {
         return id;
     }
 
-    public long insertUser(String username, String email, String password) {
+    public long insertUser(String username, String email, String password, String sessionID) {
         // get writable database as we want to write data
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -82,6 +82,7 @@ public class DBManager extends SQLiteOpenHelper {
         values.put("username", username);
         values.put("email", email);
         values.put("password", password);
+        values.put("sessionID", sessionID);
 
         // insert row
         long id = db.insert("users", null, values);
@@ -137,6 +138,19 @@ public class DBManager extends SQLiteOpenHelper {
         return count;
     }
 
+    public UserModel getCurrentUser() {
+        String query = "SELECT * FROM users";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        UserModel user = new UserModel();
+        if (cursor.moveToFirst()) {
+            user.setUsername(cursor.getString(cursor.getColumnIndex("username")));
+            user.setEmail(cursor.getString(cursor.getColumnIndex("email")));
+            user.setPassword(cursor.getString(cursor.getColumnIndex("password")));
+            user.setSessionID(cursor.getString(cursor.getColumnIndex("sessionID")));
+        }
+        return user;
+    }
 
     public Boolean authorize(String username, String password)
     {

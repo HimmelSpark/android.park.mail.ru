@@ -116,7 +116,13 @@ public class UserApi {
                         throw new IOException("Empty body body");
                     }
                     final String body = responseBody.string();
-                    db.insertUser(user.getUsername(),user.getEmail(),user.getPassword());
+                    final String sessionID = response.headers().get("JSESSIONID");
+                    db.insertUser (
+                            user.getUsername(),
+                            user.getEmail(),
+                            user.getPassword(),
+                            sessionID
+                    );
                     invokeSuccess(handler, parseMessage(body));
                 }
             } catch (IOException e) {

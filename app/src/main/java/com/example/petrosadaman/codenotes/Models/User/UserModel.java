@@ -11,9 +11,11 @@ public class UserModel {
 
     private String password = "";
 
+    private String sessionID = "";
+
     public static final String CREATE_TABLE =
             "CREATE TABLE IF NOT EXISTS  users ( id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    " username CHAR(256), email CHAR(256), password TEXT "
+                    " username CHAR(256), email CHAR(256), password TEXT, sessionID TEXT "
                     + ")";
 
 
@@ -39,5 +41,13 @@ public class UserModel {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getSessionID() {
+        return sessionID;
+    }
+
+    public void setSessionID(String sessionID) {
+        this.sessionID = sessionID;
     }
 }
