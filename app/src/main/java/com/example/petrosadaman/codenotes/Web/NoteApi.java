@@ -60,8 +60,10 @@ public class NoteApi {
             return chain.proceed(newRequest);
         });
 
+
         final Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
+                .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         noteService = retrofit.create(NoteService.class);
