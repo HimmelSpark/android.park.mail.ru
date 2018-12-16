@@ -138,11 +138,11 @@ public class DBManager extends SQLiteOpenHelper {
         return count;
     }
 
-    public UserModel getCurrentUser() {
-        String query = "SELECT * FROM users";
+    public UserModel getCurrentUser(String name) {
+        String query = "SELECT * FROM users WHERE username = ?";
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(query, null);
-        UserModel user = new UserModel();
+        Cursor cursor = db.rawQuery(query, new String[]{name});
+        UserModel user = UserModel.getUser();
         if (cursor.moveToFirst()) {
             user.setUsername(cursor.getString(cursor.getColumnIndex("username")));
             user.setEmail(cursor.getString(cursor.getColumnIndex("email")));

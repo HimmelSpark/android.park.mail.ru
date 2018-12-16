@@ -144,7 +144,7 @@ public class RegistrationFragment extends Fragment {
             return;
         }
 
-        UserModel user = new UserModel();
+        UserModel user = UserModel.getUser();
         user.setEmail(login);
         user.setUsername(login);
         user.setPassword(password);

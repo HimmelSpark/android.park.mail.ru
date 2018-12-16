@@ -73,7 +73,7 @@ public class UserApi {
                 final Response<ResponseBody> response = userService.getUser(user).execute();
                 try (final ResponseBody responseBody = response.body()) {
                     if (response.code() == 404) {
-                        if(!db.authorize(user.getUsername(), user.getPassword())) {
+                        if(!db.authorize(user.getEmail(), user.getPassword())) { //TODO getUsername() заменил на getEmail()
                             throw new IOException("HTTP code " + response.code());
                         }
                     }
@@ -84,8 +84,9 @@ public class UserApi {
                         throw new IOException("Empty body");
                     }
                     final String body = responseBody.string();
-                    System.out.println("______________________ " + response.headers());
+                    System.out.println("______________________ " + response.headers()); //TODO не забыть убрать
                     System.out.println("______________________");
+                    UserModel.getUser().setSessionID(response.headers().get("Set-Cookie"));
                     invokeSuccess(handler, parseMessage(body));
                 }
             } catch (IOException e) {

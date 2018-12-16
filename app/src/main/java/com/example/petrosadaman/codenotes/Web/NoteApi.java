@@ -9,6 +9,7 @@ import com.example.petrosadaman.codenotes.Models.Message.MessageModel;
 import com.example.petrosadaman.codenotes.Models.Note.NoteListAdapter;
 import com.example.petrosadaman.codenotes.Models.Note.NoteModel;
 import com.example.petrosadaman.codenotes.Models.Note.NoteService;
+import com.example.petrosadaman.codenotes.Models.User.UserModel;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
@@ -54,8 +55,11 @@ public class NoteApi {
     private NoteApi() {
 
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor((chain) -> {
+
+            UserModel userModel = UserModel.getUser();
+
             Request newRequest = chain.request().newBuilder()
-                    .header("JSESSIONID", this.db.getCurrentUser().getSessionID())
+                    .header("Set-Cookie", UserModel.getUser().getSessionID())
                     .build();
             return chain.proceed(newRequest);
         }).build();
@@ -81,7 +85,7 @@ public class NoteApi {
         final ListenerHandler<NoteApi.OnNoteGetListener> handler = new ListenerHandler<>(listener);
         executor.execute(() -> {
             try {
-                final Response<ResponseBody> response = noteService.getList("supreme").execute();
+                final Response<ResponseBody> response = noteService.getList(UserModel.getUser().getUsername()).execute();
                 try (final ResponseBody responseBody = response.body()) {
                     if (response.code() >= 300) {
                         System.out.println("HTTP code " + response.code());

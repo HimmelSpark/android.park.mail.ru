@@ -4,6 +4,14 @@ import com.google.gson.annotations.SerializedName;
 
 public class UserModel {
 
+    private static UserModel INSTANCE = new UserModel();
+
+    private UserModel() {}
+
+    public static UserModel getUser() {
+        return INSTANCE;
+    }
+
     @SerializedName("name")
     private String username = "";
 

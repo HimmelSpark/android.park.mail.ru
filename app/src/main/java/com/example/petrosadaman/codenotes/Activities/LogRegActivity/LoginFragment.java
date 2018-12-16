@@ -86,13 +86,12 @@ public class LoginFragment extends Fragment {
         String email = loginInput.getText().toString();
         String password = passwordInput.getText().toString();
 
-        UserModel user = new UserModel();
+        UserModel user = UserModel.getUser();
         user.setEmail(email);
         user.setPassword(password);
         UserApi some =  UserApi.getInstance();
         some.setDB(db);
-        userHandler =some.authUser(user, listener);
-
+        userHandler = some.authUser(user, listener);
     }
 
     protected void startProgress() {
