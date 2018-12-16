@@ -58,7 +58,7 @@ public class UserApi {
     }
 
 
-    public void  setDB(DBManager db){
+    public void  setDB(DBManager db) {
         this.db = db;
     }
 
@@ -72,7 +72,6 @@ public class UserApi {
             try {
                 final Response<ResponseBody> response = userService.getUser(user).execute();
                 try (final ResponseBody responseBody = response.body()) {
-                    System.out.println("CODE____________" + response.toString());
                     if (response.code() == 404) {
                         if(!db.authorize(user.getUsername(), user.getPassword())) {
                             throw new IOException("HTTP code " + response.code());
@@ -82,14 +81,15 @@ public class UserApi {
                         throw new IOException("HTTP code " + response.code());
                     }
                     if (responseBody == null) {
-                        throw new IOException("Empty body body");
+                        throw new IOException("Empty body");
                     }
                     final String body = responseBody.string();
+                    System.out.println("______________________ " + response.headers());
+                    System.out.println("______________________");
                     invokeSuccess(handler, parseMessage(body));
                 }
             } catch (IOException e) {
                 if(db.authorize(user.getEmail(), user.getPassword())) {
-                    System.out.print("Authed");
                     invokeSuccess(handler, new MessageModel(user.getEmail()));
                 }
                 else {

@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -49,6 +51,15 @@ public class NoteApi {
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
 
     private NoteApi() {
+
+        OkHttpClient client = new OkHttpClient();
+        client.interceptors().add((chain) -> {
+            Request newRequest = chain.request().newBuilder()
+                    .header("JSESSIONID", this.db.getDatabaseName()) //TODO тут надо подставить сессию из БД
+                    .build();
+            return chain.proceed(newRequest);
+        });
+
         final Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
