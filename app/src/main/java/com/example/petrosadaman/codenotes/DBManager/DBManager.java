@@ -149,6 +149,7 @@ public class DBManager extends SQLiteOpenHelper {
             user.setPassword(cursor.getString(cursor.getColumnIndex("password")));
             user.setSessionID(cursor.getString(cursor.getColumnIndex("sessionID")));
         }
+        db.close();
         return user;
     }
 
@@ -162,6 +163,7 @@ public class DBManager extends SQLiteOpenHelper {
         if(cursor.getCount()==0){
             return false;
         }
+        db.close();
         return password.equals(cursor.getString(cursor.getColumnIndex("password")));
 
     }

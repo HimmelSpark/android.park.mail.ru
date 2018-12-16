@@ -61,20 +61,6 @@ public class NoteApi {
         }).build();
 
 
-
-//        try {
-//            client.interceptors().add((chain) -> {
-//                Request newRequest = chain.request().newBuilder()
-//                        .header("JSESSIONID", this.db.getCurrentUser().getSessionID())
-//                        .build();
-//                return chain.proceed(newRequest);
-//            });
-//        } catch (Exception e) {
-//            String message = e.getMessage();
-//            System.out.println(e.getMessage());
-//        }
-
-
         final Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .client(client)
