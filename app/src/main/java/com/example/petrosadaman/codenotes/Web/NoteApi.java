@@ -32,7 +32,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class NoteApi {
     // Base URL should end with '/' symbol !!!
     private static final String BASE_URL = "http://178.128.138.0:8080/users/";
-//    private static final String BASE_URL = "http://requestbin.fullcontact.com/1ld9n2x1/";
+//    private static final String BASE_URL = "https://requestbin.jumio.com/wk6pdqwk/";
 
     private static final NoteApi INSTANCE = new NoteApi();
 
@@ -61,6 +61,9 @@ public class NoteApi {
             Request newRequest = chain.request().newBuilder()
                     .header("Set-Cookie", UserModel.getUser().getSessionID())
                     .build();
+
+            System.out.println("-------––––––––------––––––– " + newRequest.toString());
+
             return chain.proceed(newRequest);
         }).build();
 
