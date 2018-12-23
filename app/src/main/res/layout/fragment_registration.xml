@@ -5,93 +5,68 @@
     android:layout_height="match_parent"
     tools:context=".Activities.LogRegActivity.RegistrationFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/Login"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
-            android:text="@string/header_reg"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+    <LinearLayout
+        android:id="@+id/main"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:orientation="vertical"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="60dp">
 
-        <TextView
-            android:id="@+id/user_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/Login"
-            android:layout_marginTop="75dp"
-            android:layout_marginStart="10dp"
-            android:text="@string/login_username_label"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_layout_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <EditText
-            android:id="@+id/edit_user"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/user_text"
-            android:layout_marginStart="35dp"
-            android:layout_toEndOf="@+id/user_text"
-            android:hint="@string/login_username_input_placeholder">
-            <requestFocus />
-        </EditText>
+            <EditText
+                android:id="@+id/edit_user"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:hint="@string/login_username_input_placeholder" />
+        </android.support.design.widget.TextInputLayout>
 
-        <TextView
-            android:id="@+id/password_text"
-            android:layout_width="wrap_content"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_layout_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/edit_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:hint="@string/login_password_input_placeholder" />
+        </android.support.design.widget.TextInputLayout>
+
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/input_layout_password_confirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/edit_confirm_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:hint="@string/confirm_password_input_placeholder" />
+        </android.support.design.widget.TextInputLayout>
+
+
+        <Button android:id="@+id/button_login"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/user_text"
-            android:layout_below="@+id/user_text"
+            android:text="@string/register_button_label"
+            android:background="@color/colorPrimary"
             android:layout_marginTop="40dp"
-            android:text="@string/login_password_label"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        <EditText
-            android:id="@+id/edit_password"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/password_text"
-            android:layout_alignStart="@+id/edit_user"
-            android:layout_alignEnd="@+id/edit_user"
-            android:hint="@string/login_password_input_placeholder"
-            android:inputType="textPassword" />
-
-        <TextView
-            android:id="@+id/confirm_password_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/user_text"
-            android:layout_below="@+id/user_text"
-            android:layout_marginTop="100dp"
-            android:text="@string/confirm_password_label"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        <EditText
-            android:id="@+id/edit_confirm_password"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/confirm_password_text"
-            android:layout_alignStart="@+id/edit_user"
-            android:layout_alignEnd="@+id/edit_user"
-            android:hint="@string/confirm_password_input_placeholder"
-            android:inputType="textPassword" />
+            android:textColor="@android:color/white"/>
 
 
-        <Button
-            android:id="@+id/button_login"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/edit_password"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="94dp"
-            android:text="@string/register_button_label" />
+    </LinearLayout>
 
-    </RelativeLayout>
 
 </FrameLayout>
