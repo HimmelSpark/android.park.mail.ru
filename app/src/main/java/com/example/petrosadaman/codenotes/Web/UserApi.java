@@ -19,6 +19,8 @@ import java.io.Console;
 import java.io.IOException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import okhttp3.ResponseBody;
 import retrofit2.Response;
@@ -34,6 +36,7 @@ public class UserApi {
 //    private static final String BASE_URL = "http://127.0.0.1:8080/users/";
     private DBManager db;
     private static final UserApi INSTANCE = new UserApi();
+    private Logger logger = Logger.getLogger("UserAPI");
 
     /**
      * GSON достаточно тяжелый объект с долгой инициализацией. Не стоит создавать его каждый
@@ -84,16 +87,22 @@ public class UserApi {
                         throw new IOException("Empty body");
                     }
                     final String body = responseBody.string();
-                    System.out.println("______________________ " + response.headers()); //TODO не забыть убрать
-                    System.out.println("______________________");
                     UserModel.getUser().setSessionID(response.headers().get("Set-Cookie"));
+                    db.insertUser (
+                            user.getUsername(),
+                            user.getEmail(),
+                            user.getPassword(),
+                            UserModel.getUser().getSessionID()
+                    );
                     invokeSuccess(handler, parseMessage(body));
                 }
             } catch (IOException e) {
-                if(db.authorize(user.getEmail(), user.getPassword())) {
+                logger.log(Level.SEVERE, e.getMessage());
+                if (db.authorize(user.getEmail(), user.getPassword())) {
                     invokeSuccess(handler, new MessageModel(user.getEmail()));
                 }
                 else {
+                    logger.log(Level.SEVERE, "No user data in database");
                     invokeFailure(handler, e);
                 }
             }
@@ -107,10 +116,7 @@ public class UserApi {
             try {
                 final Response<ResponseBody> response = userService.regUser(user).execute();
                 try (final ResponseBody responseBody = response.body()) {
-                    System.out.println("CODE____________" + response.toString());
                     if (response.code() >= 300) {
-                        //TODO | при ошибке тоже возвращается код, надо его принимать, чтобы узнать, что произошло на беке
-                        //TODO | либо интерпретировать код ошибки
                         throw new IOException("HTTP code " + response.code());
                     }
                     if (responseBody == null) {
@@ -127,6 +133,7 @@ public class UserApi {
                     invokeSuccess(handler, parseMessage(body));
                 }
             } catch (IOException e) {
+                logger.log(Level.SEVERE, e.getMessage());
                 invokeFailure(handler, e);
             }
         });
@@ -136,7 +143,6 @@ public class UserApi {
 
     private void invokeSuccess(ListenerHandler<OnUserGetListener> handler, final MessageModel message) {
         mainHandler.post(() -> {
-            System.out.println("in invoke success!");
             OnUserGetListener listener = handler.getListener();
             if (listener!= null) {
                 Log.d("API", "listener NOT null");
@@ -151,7 +157,6 @@ public class UserApi {
 
     private void invokeFailure(ListenerHandler<OnUserGetListener> handler, IOException e) {
         mainHandler.post(() -> {
-            System.out.println("in invoke failure!");
             OnUserGetListener listener = handler.getListener();
             if (listener != null) {
                 Log.d("API", "listener NOT null");

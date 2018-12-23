@@ -21,6 +21,8 @@ import com.example.petrosadaman.codenotes.Web.ListenerHandler;
 import com.example.petrosadaman.codenotes.Web.UserApi;
 
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class LoginFragment extends Fragment {
     private EditText loginInput;
@@ -32,6 +34,8 @@ public class LoginFragment extends Fragment {
     private ListenerHandler<UserApi.OnUserGetListener> userHandler;
     private DBManager db;
 
+    private Logger logger = Logger.getLogger("LOGIN FRAGMENT");
+
     public void setDB(DBManager db){
         this.db = db;
     }
@@ -40,9 +44,7 @@ public class LoginFragment extends Fragment {
 
         @Override
         public void onUserSuccess(MessageModel message) {
-            System.out.println("ON_USER_SUCCESS: " + message.getMessage());
             //TODO | проверить сообщение. Если удалось залогиниться, то сохранить пользователя в БД
-            //TODO | перекинуть на следующий активити, стерев из истории текущий активити
             //TODO | переделать проверку сообщения через перечисления
 
             stopProgress();
@@ -53,8 +55,7 @@ public class LoginFragment extends Fragment {
         @Override
         public void onUserError(Exception error) {
             stopProgress();
-            System.out.println("ON_USER_ERROR: " + error.getMessage());
-            //TODO написать логирование
+            logger.log(Level.SEVERE, error.getMessage());
         }
     };
 

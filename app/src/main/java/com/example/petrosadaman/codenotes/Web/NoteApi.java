@@ -20,6 +20,8 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -52,6 +54,8 @@ public class NoteApi {
 
     private final Handler mainHandler = new Handler(Looper.getMainLooper());
 
+    private final Logger logger = Logger.getLogger("NoteAPI");
+
     private NoteApi() {
 
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor((chain) -> {
@@ -59,10 +63,10 @@ public class NoteApi {
             UserModel userModel = UserModel.getUser();
 
             Request newRequest = chain.request().newBuilder()
-                    .header("Set-Cookie", UserModel.getUser().getSessionID())
+                    .header("Cookie", UserModel.getUser().getSessionID())
                     .build();
 
-            System.out.println("-------––––––––------––––––– " + newRequest.toString());
+            logger.log(Level.WARNING, newRequest.toString()); //TODO | чисто для отладки
 
             return chain.proceed(newRequest);
         }).build();
@@ -88,14 +92,13 @@ public class NoteApi {
         final ListenerHandler<NoteApi.OnNoteGetListener> handler = new ListenerHandler<>(listener);
         executor.execute(() -> {
             try {
-                final Response<ResponseBody> response = noteService.getList(UserModel.getUser().getUsername()).execute();
+                String namr = UserModel.getUser().getEmail();
+                final Response<ResponseBody> response = noteService.getList(UserModel.getUser().getEmail()).execute();
                 try (final ResponseBody responseBody = response.body()) {
                     if (response.code() >= 300) {
-                        System.out.println("HTTP code " + response.code());
                         throw new IOException("HTTP code " + response.code());
                     }
                     if (responseBody == null) {
-                        System.out.println("Empty body");
                         throw new IOException("Empty body body");
                     }
                     final String body = responseBody.string();
@@ -103,13 +106,16 @@ public class NoteApi {
                     invokeSuccess(handler, listNotes);
                 }
             } catch (IOException e) {
+
+                    logger.log(Level.SEVERE, e.getMessage());
+
                     try {
-                        List<NoteModel> lst= db.getAllNotes(user);
-                        System.out.print("Authed");
+                        List<NoteModel> lst = db.getAllNotes(user);
                         invokeSuccess(handler, lst);
                     }
-                    catch (Exception io){
+                    catch (Exception io) {
                         invokeFailure(handler, e);
+                        logger.log(Level.SEVERE, "could not get notes from DB");
                     }
             }
         });
@@ -123,12 +129,10 @@ public class NoteApi {
                 final Response<ResponseBody> response = noteService.addNote(noteModel).execute();
                 try (final ResponseBody responseBody = response.body()) {
                     if (response.code() >= 300) {
-                        System.out.println("HTTP code " + response.code());
                         throw new IOException("HTTP code " + response.code());
                     }
 
                     if (responseBody == null) {
-                        System.out.println("Empty body");
                         throw new IOException("Empty body body");
                     }
 
@@ -138,6 +142,7 @@ public class NoteApi {
 
                 }
             } catch (IOException e) {
+                logger.log(Level.SEVERE, e.getMessage());
                 invokeFailureMessage(handler, e);
             }
         });
@@ -146,33 +151,24 @@ public class NoteApi {
 
     private void invokeSuccess(ListenerHandler<NoteApi.OnNoteGetListener> handler, final List<NoteModel> note) {
         mainHandler.post(() -> {
-            System.out.println("in invoke success! note");
             NoteApi.OnNoteGetListener listener = handler.getListener();
             if (listener!= null) {
-                Log.d("API", "listener NOT null");
                 listener.onNoteSuccess(note);
-            } else {
-                Log.d("API", "listener is null");
             }
         });
     }
 
     private void invokeFailure(ListenerHandler<NoteApi.OnNoteGetListener> handler, IOException e) {
         mainHandler.post(() -> {
-            System.out.println("in invoke failure! note");
             NoteApi.OnNoteGetListener listener = handler.getListener();
             if (listener != null) {
-                Log.d("API", "listener NOT null");
                 listener.onNoteError(e);
-            } else {
-                Log.d("API", "listener is null");
             }
         });
     }
 
     private void invokeSuccessMessage(ListenerHandler<NoteApi.OnNoteCreateListener> handler, final MessageModel message) {
         mainHandler.post(() -> {
-            System.out.println("in invoke success! note");
             NoteApi.OnNoteCreateListener listener = handler.getListener();
             if (listener!= null) {
                 Log.d("API", "listener NOT null");
@@ -185,7 +181,6 @@ public class NoteApi {
 
     private void invokeFailureMessage(ListenerHandler<NoteApi.OnNoteCreateListener> handler, IOException e) {
         mainHandler.post(() -> {
-            System.out.println("in invoke failure! note");
             NoteApi.OnNoteCreateListener listener = handler.getListener();
             if (listener != null) {
                 Log.d("API", "listener NOT null");
@@ -198,12 +193,11 @@ public class NoteApi {
 
     private List<NoteModel> parseNotes(final String body) throws IOException {
         try {
-            //todo:: просто жесть и замкнутый круг, пришлось исользовать новый gson в обход десериализатора
             Type listType = new TypeToken<List<NoteModel>>(){}.getType();
             List<NoteModel> listItemsDes = new Gson().fromJson(body, listType);
             return listItemsDes;
         } catch (JsonSyntaxException e) {
-            System.out.println("JSON ERROR");
+            logger.log(Level.SEVERE, e.getMessage());
             throw new IOException(e);
         }
     }

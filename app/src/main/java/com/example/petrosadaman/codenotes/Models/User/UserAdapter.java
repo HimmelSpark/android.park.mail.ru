@@ -15,7 +15,6 @@ public class UserAdapter implements JsonSerializer<UserModel>, JsonDeserializer<
     @Override
     public UserModel deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         //TODO написать десериалайзер!!!
-        System.out.println(json.toString());
         return null;
     }
 

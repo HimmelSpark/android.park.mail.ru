@@ -24,6 +24,7 @@ import com.example.petrosadaman.codenotes.Activities.LogRegActivity.Registration
 import com.example.petrosadaman.codenotes.DBManager.DBManager;
 import com.example.petrosadaman.codenotes.Models.Message.MessageModel;
 import com.example.petrosadaman.codenotes.Models.Note.NoteModel;
+import com.example.petrosadaman.codenotes.Models.User.UserModel;
 import com.example.petrosadaman.codenotes.R;
 import com.example.petrosadaman.codenotes.Web.ListenerHandler;
 import com.example.petrosadaman.codenotes.Web.NoteApi;
@@ -52,6 +53,9 @@ public class NotesActivity extends AppCompatActivity
     private DBManager db = new DBManager(this);
     private String user;
 
+    private boolean isEditing = false;
+    private int currentEditing = 0;
+
     SingleNoteFragment noteFragment;
 
     public NoteApi.OnNoteGetListener listener = new NoteApi.OnNoteGetListener() {
@@ -75,12 +79,12 @@ public class NotesActivity extends AppCompatActivity
 
         }
     };
+
     public NoteApi.OnNoteCreateListener onNoteCreateListener = new NoteApi.OnNoteCreateListener() {
         @Override
         public void onMessageSuccess(MessageModel message) {
             switch (message.getMessage()) {
                 case "SUCCESSFULLY_ADDED": {
-                    System.out.println(message.getMessage());
 //                    notesAdapter.addItem();
 
                     //TODO | создать заметку
@@ -105,7 +109,7 @@ public class NotesActivity extends AppCompatActivity
 
         dialog = new Dialog(NotesActivity.this);
         // Установите заголовок
-        dialog.setTitle("Тест укукуку");
+        dialog.setTitle("Тест укукуку"); //TODO | Это что за покемон?
         // Передайте ссылку на разметку
         dialog.setContentView(R.layout.addnote);
 
@@ -117,18 +121,17 @@ public class NotesActivity extends AppCompatActivity
             Button save = dialog.findViewById(R.id.button_save);
             save.setOnClickListener(vv -> {
                 EditText titleInput = dialog.findViewById(R.id.edit_title);
-//                EditText bodyInput = dialog.findViewById(R.id.edit_body);
                 String titlee = titleInput.getText().toString();
-//                String bodyy = bodyInput.getText().toString();
                 NoteModel notee = new NoteModel();
-                notee.setAuthor("supreme");
+                notee.setAuthor(UserModel.getUser().getEmail());
                 notee.setTitle(titlee);
                 notee.setBody("");
                 NoteApi some =  NoteApi.getInstance();
                 some.setDB(db);
+                some.createNote(notee, onNoteCreateListener);
 //                noteCreateHandler = NoteApi.getInstance().createNote(notee, onNoteCreateListener);
-                notesAdapter.addItem(notee);
-                this.onClick(null , notesAdapter.getItemCount() - 1);
+                notesAdapter.addItem(notee, findViewById(R.id.rv_notes));
+//                this.onClick(null , notesAdapter.getItemCount() - 1);
 //                notesAdapter.getCreatedItem()
                 dialog.dismiss();
             });
@@ -192,6 +195,7 @@ public class NotesActivity extends AppCompatActivity
 
     @Override
     public void onClick(View view, int position) {
+        currentEditing = position;
         Bundle bundle = new Bundle();
         bundle.putString("body", notesAdapter.getBody(position));
         final FragmentManager fragmentManager = getSupportFragmentManager();
@@ -205,19 +209,28 @@ public class NotesActivity extends AppCompatActivity
         }
         transaction.addToBackStack(null);
         transaction.commit();
+        isEditing = true;
     }
 
     @Override
     public void onBackPressed() {
-        String textToSave = this.noteFragment.getEditor().getText().toString();
-        NoteModel notee = new NoteModel();
-        notee.setAuthor("supreme");
-        notee.setTitle("some_title");
-        notee.setBody(textToSave);
-        NoteApi some =  NoteApi.getInstance();
-        some.setDB(db);
-        noteCreateHandler = NoteApi.getInstance().createNote(notee, onNoteCreateListener);
-        notesAdapter.addItem(notee);
+
+        if (isEditing) {
+
+            //TODO | продолжить работу тут, когда оклемаюсь
+
+            String textToSave = this.noteFragment.getEditor().getText().toString();
+            NoteModel notee = new NoteModel();
+            notee.setAuthor(UserModel.getUser().getEmail());
+            notee.setTitle("some_title");
+            notee.setBody(textToSave);
+            NoteApi some =  NoteApi.getInstance();
+            some.setDB(db); // Записать в бд
+            //TODO | здесь надо вызвать метод обновления заметки | З.Ы: Егор пока не добавил
+            noteCreateHandler = NoteApi.getInstance().createNote(notee, onNoteCreateListener);
+            isEditing = false;
+        }
+
         super.onBackPressed();
     }
 

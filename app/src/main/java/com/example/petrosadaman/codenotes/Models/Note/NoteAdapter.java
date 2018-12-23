@@ -18,7 +18,6 @@ import java.util.List;
 public class NoteAdapter implements JsonSerializer<NoteModel>, JsonDeserializer<NoteModel> {
     @Override
     public NoteModel deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-//        System.out.println("JSON epta: " + json);
 //        Type listType = new TypeToken<List<NoteModel>>(){}.getType();
 //        List<NoteModel> listItemsDes = new Gson().fromJson(json, listType);
         return null;

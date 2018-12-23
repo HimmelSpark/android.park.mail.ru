@@ -3,15 +3,25 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:layout_gravity="center">
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+
+        android:layout_width="0dp"
+        android:layout_height="70dp"
+        android:paddingTop="20dp"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
         android:id="@+id/tv_item"
-        android:text="some text"
-        android:textSize="32sp"
-        android:layout_weight="3"
-        android:layout_marginBottom="35dp"
-        />
+        android:text="@string/some_text"
+        android:layout_gravity="center"
+        android:textSize="24sp"
+        android:layout_weight="1"
+        android:layout_marginBottom="5dp"
+
+        android:textAppearance="?android:attr/textAppearanceListItemSmall"
+        android:minHeight="?android:attr/listPreferredItemHeightSmall"
+
+        android:background="?android:attr/selectableItemBackground"/>
 </LinearLayout>

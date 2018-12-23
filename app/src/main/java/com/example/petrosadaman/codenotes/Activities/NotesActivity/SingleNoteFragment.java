@@ -34,17 +34,14 @@ public class SingleNoteFragment extends Fragment {
         editor.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                System.out.println("in BeforeChanged | char " + s + "| start " + start + "| count " + count + "| after " + after);
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                System.out.println("in TextChanged | char " + s + "| start " + start + "| count " + count + "| before " + before);
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                System.out.println("in afterChanged " + s.toString());
             }
         });
 
@@ -54,6 +51,7 @@ public class SingleNoteFragment extends Fragment {
     EditText getEditor() {
         return this.editor;
     }
+
 
 
     //TODO прописать установку данных и заливку при аттаче
