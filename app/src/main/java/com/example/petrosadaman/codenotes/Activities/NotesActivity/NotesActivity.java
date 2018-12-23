@@ -110,6 +110,8 @@ public class NotesActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notes);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         dialog = new Dialog(NotesActivity.this);
         // Установите заголовок
         dialog.setTitle("Тест укукуку"); //TODO | Это что за покемон?
@@ -146,7 +148,11 @@ public class NotesActivity extends AppCompatActivity
         nodeHandler = NoteApi.getInstance().fetchNotes(listener, user);
         notesAdapter.setItemClickListener(this);
 
-
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
     }
 
 

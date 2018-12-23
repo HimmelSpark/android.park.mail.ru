@@ -36,17 +36,9 @@ public class NoteListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.notelist, container, false);
-//        View activityNotes = inflater.inflate(R.layout.activity_notes, container, false);
-//        View appBarNotes = inflater.inflate(R.layout.app_bar_notes, container, false);
         RecyclerView rv = view.findViewById(R.id.rv_notes);
         rv.setAdapter(notesAdapter);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-
-//        toolbar = (Toolbar) appBarNotes.findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-
-//        FancyBehavior fancyBehavior = new FancyBehavior();
-//        layoutManager.generateLayoutParams(fancyBehavior);
         rv.setLayoutManager(layoutManager);
 
         if (rv.getParent() != null) {
@@ -56,15 +48,6 @@ public class NoteListFragment extends Fragment {
         decoration = new DividerItemDecoration(rv.getContext(), ((LinearLayoutManager) layoutManager).getOrientation());
         rv.addItemDecoration(decoration);
         rv.addItemDecoration(new CharacterItemDecoration(5)); //TODO | может пригодиться
-
-//        DrawerLayout drawer = (DrawerLayout) activityNotes.findViewById(R.id.drawer_layout);
-//        System.out.println("drawer: " + drawer);
-//        System.out.println("toolbar: " + toolbar);
-//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-//                getActivity(), drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-//        drawer.addDrawerListener(toggle);
-//        toggle.syncState();
-
         return rv;
     }
 
