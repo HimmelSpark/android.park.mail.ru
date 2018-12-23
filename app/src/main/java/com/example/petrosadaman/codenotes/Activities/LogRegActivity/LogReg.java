@@ -3,7 +3,6 @@ package com.example.petrosadaman.codenotes.Activities.LogRegActivity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -39,10 +38,7 @@ public class LogReg extends AppCompatActivity implements RegistrationFragment.On
         LoginFragment loginFragment = new LoginFragment();
         loginFragment.setDB(dbManager);
         transaction.replace(R.id.log_reg_container, loginFragment);
-
         transaction.commit();
-
-
     }
 
     protected void switchToNotes(String username) {

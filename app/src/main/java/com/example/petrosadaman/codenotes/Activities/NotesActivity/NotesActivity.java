@@ -9,6 +9,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -52,6 +54,7 @@ public class NotesActivity extends AppCompatActivity
 
     private DBManager db = new DBManager(this);
     private String user;
+    private Toolbar toolbar;
 
     private boolean isEditing = false;
     private int currentEditing = 0;
@@ -67,6 +70,7 @@ public class NotesActivity extends AppCompatActivity
 
             NoteListFragment list = new NoteListFragment();
             list.setNotesAdapter(notesAdapter);
+            list.setToolbar(toolbar);
             transaction.replace(R.id.list_container, list);
             if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
                 transaction.replace(R.id.note_container,new SingleNoteFragment());
@@ -106,7 +110,6 @@ public class NotesActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notes);
-
         dialog = new Dialog(NotesActivity.this);
         // Установите заголовок
         dialog.setTitle("Тест укукуку"); //TODO | Это что за покемон?
@@ -142,6 +145,8 @@ public class NotesActivity extends AppCompatActivity
         NoteApi.getInstance().setDB(db);
         nodeHandler = NoteApi.getInstance().fetchNotes(listener, user);
         notesAdapter.setItemClickListener(this);
+
+
     }
 
 
