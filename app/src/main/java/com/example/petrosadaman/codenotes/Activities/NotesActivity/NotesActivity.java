@@ -226,6 +226,11 @@ public class NotesActivity extends AppCompatActivity
 
     @Override
     public void onClick(View view, int position) {
+
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            fab.hide();
+        }
+
         currentEditing = position;
         Bundle bundle = new Bundle();
         bundle.putString("body", notesAdapter.getBody(position));
@@ -245,6 +250,10 @@ public class NotesActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
+
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            fab.show();
+        }
 
         if (isEditing) {
 

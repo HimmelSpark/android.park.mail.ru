@@ -29,4 +29,5 @@
     <string name="switch_to_register_button_label">REGISTER</string>
     <string name="create">CREATE</string>
     <string name="some_text">some text</string>
+    <string name="delete">DELETE</string>
 </resources>

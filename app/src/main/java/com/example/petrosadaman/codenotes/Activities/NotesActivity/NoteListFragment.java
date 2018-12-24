@@ -33,7 +33,6 @@ public class NoteListFragment extends Fragment {
     private Toolbar toolbar;
 
 
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
