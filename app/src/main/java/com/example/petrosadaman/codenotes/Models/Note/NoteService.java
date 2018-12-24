@@ -18,4 +18,7 @@ public interface NoteService {
     @GET("notes/{username}")
     Call<ResponseBody> getList(@Path("username") String username);
 
+    @POST("update")
+    Call<ResponseBody> updateNote(@Body NoteModel note);
+
 }

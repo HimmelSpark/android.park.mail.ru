@@ -48,6 +48,7 @@ public class NotesActivity extends AppCompatActivity
     private List<Note> noteList;
     private ListenerHandler<NoteApi.OnNoteGetListener> nodeHandler;
     private ListenerHandler<NoteApi.OnNoteCreateListener> noteCreateHandler;
+    private ListenerHandler<NoteApi.OnNoteUpdateListener> noteUpdateHandler;
     private FloatingActionButton fab;
 
     private Dialog dialog;
@@ -103,6 +104,25 @@ public class NotesActivity extends AppCompatActivity
             //TODO | тут уже прочекать ошибку
             //TODO | может быть создать локально, записать в бд
             //TODO | в бд к заметке выставить флаг Deferred
+        }
+    };
+
+    public NoteApi.OnNoteUpdateListener onNoteUpdateListener = new NoteApi.OnNoteUpdateListener() {
+        @Override
+        public void onNoteUpdateSuccess(MessageModel message) {
+            if (message.getMessage().equals("SUCCESSFULLY_UPDATED")) {
+                //TODO | вывести плашку, что заметка сохранена
+                //TODO | не забыть обновить заметку в бд!
+            } else {
+                //TODO | вывести плашку, что не удалось сохранить заметку
+            }
+        }
+
+        @Override
+        public void onNoteUpdateError(Exception e) {
+            //TODO | тут уже прочекать ошибку
+            //TODO | может быть создать локально, записать обновить бд
+            //TODO | в бд к заметке выставить флаг DeferredUpdate
         }
     };
 
@@ -230,15 +250,17 @@ public class NotesActivity extends AppCompatActivity
 
             //TODO | продолжить работу тут, когда оклемаюсь
 
+            NoteModel noteFromAdapter = notesAdapter.getItemByPosition(currentEditing);
+
             String textToSave = this.noteFragment.getEditor().getText().toString();
             NoteModel notee = new NoteModel();
             notee.setAuthor(UserModel.getUser().getEmail());
-            notee.setTitle("some_title");
+            notee.setTitle(noteFromAdapter.getTitle());
             notee.setBody(textToSave);
             NoteApi some =  NoteApi.getInstance();
-            some.setDB(db); // Записать в бд
-            //TODO | здесь надо вызвать метод обновления заметки | З.Ы: Егор пока не добавил
-            noteCreateHandler = NoteApi.getInstance().createNote(notee, onNoteCreateListener);
+            some.setDB(db); //TODO | добавить в обновление заметки по тайтлу
+            notesAdapter.updateItem(currentEditing, notee);
+            noteUpdateHandler = NoteApi.getInstance().updateNote(notee, onNoteUpdateListener);
             isEditing = false;
         }
 

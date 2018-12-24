@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.TextView;
@@ -17,7 +16,6 @@ import com.example.petrosadaman.codenotes.R;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHolder> {
 
@@ -41,9 +39,19 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
         recyclerView.scheduleLayoutAnimation();
     }
 
+    public NoteModel getItemByPosition(int position) {
+        return noteList.get(position);
+    }
+
+    public void updateItem(int position, NoteModel newNote) {
+        noteList.set(position, newNote);
+        notifyDataSetChanged();
+    }
+
     public int getAdapterSize() {
         return this.noteList.size();
     }
+
 
     public void clearItems() {
         noteList.clear();

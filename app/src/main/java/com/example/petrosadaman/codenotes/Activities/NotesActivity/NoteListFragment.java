@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
+import com.example.petrosadaman.codenotes.Models.Note.NoteModel;
 import com.example.petrosadaman.codenotes.R;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -30,6 +31,8 @@ public class NoteListFragment extends Fragment {
 
     private NotesAdapter notesAdapter;
     private Toolbar toolbar;
+
+
 
     @Nullable
     @Override
@@ -58,6 +61,12 @@ public class NoteListFragment extends Fragment {
     public void setToolbar(Toolbar toolbar) {
         this.toolbar = toolbar;
     }
+
+    public NoteModel getNoteByPosition(int position) {
+        return notesAdapter.getItemByPosition(position);
+    }
+
+
 
     private class CharacterItemDecoration extends RecyclerView.ItemDecoration {
 

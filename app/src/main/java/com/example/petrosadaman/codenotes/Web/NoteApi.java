@@ -4,6 +4,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
+import com.example.petrosadaman.codenotes.Activities.NotesActivity.Note;
 import com.example.petrosadaman.codenotes.DBManager.DBManager;
 import com.example.petrosadaman.codenotes.Models.Message.MessageModel;
 import com.example.petrosadaman.codenotes.Models.Note.NoteListAdapter;
@@ -133,7 +134,7 @@ public class NoteApi {
                     }
 
                     if (responseBody == null) {
-                        throw new IOException("Empty body body");
+                        throw new IOException("Empty response body");
                     }
 
                     final String body = responseBody.string();
@@ -144,6 +145,33 @@ public class NoteApi {
             } catch (IOException e) {
                 logger.log(Level.SEVERE, e.getMessage());
                 invokeFailureMessage(handler, e);
+            }
+        });
+        return handler;
+    }
+
+    public ListenerHandler<NoteApi.OnNoteUpdateListener> updateNote(final NoteModel noteModel, final NoteApi.OnNoteUpdateListener listener) {
+        final ListenerHandler<NoteApi.OnNoteUpdateListener> handler = new ListenerHandler<>(listener);
+        executor.execute(() -> {
+            try {
+                final Response<ResponseBody> response = noteService.updateNote(noteModel).execute();
+                try (final ResponseBody responseBody = response.body()) {
+                    if (response.code() >= 300) {
+                        throw new IOException("HTTP code " + response.code());
+                    }
+
+                    if (responseBody == null) {
+                        throw new IOException("Empty response body");
+                    }
+
+                    final String body = responseBody.string();
+                    MessageModel message = parseMessage(body);
+                    invokeSuccessUpdate(handler, message);
+                }
+
+            } catch (IOException e) {
+                logger.log(Level.SEVERE, e.getMessage());
+                invokeFilureUpdate(handler, e);
             }
         });
         return handler;
@@ -191,6 +219,30 @@ public class NoteApi {
         });
     }
 
+    private void invokeSuccessUpdate(ListenerHandler<NoteApi.OnNoteUpdateListener> handler,  final MessageModel message) {
+        mainHandler.post(() -> {
+            NoteApi.OnNoteUpdateListener listener = handler.getListener();
+            if (listener!= null) {
+                Log.d("API", "listener NOT null");
+                listener.onNoteUpdateSuccess(message);
+            } else {
+                Log.d("API", "listener is null");
+            }
+        });
+    }
+
+    private void invokeFilureUpdate(ListenerHandler<NoteApi.OnNoteUpdateListener> handler, IOException e) {
+        mainHandler.post(() -> {
+            NoteApi.OnNoteUpdateListener listener = handler.getListener();
+            if (listener != null) {
+                Log.d("API", "listener NOT null");
+                listener.onNoteUpdateError(e);
+            } else {
+                Log.d("API", "listener is null");
+            }
+        });
+    }
+
     private List<NoteModel> parseNotes(final String body) throws IOException {
         try {
             Type listType = new TypeToken<List<NoteModel>>(){}.getType();
@@ -201,6 +253,7 @@ public class NoteApi {
             throw new IOException(e);
         }
     }
+
     public interface OnNoteGetListener {
         void onNoteSuccess(final List<NoteModel> note);
 
@@ -214,9 +267,16 @@ public class NoteApi {
             throw new IOException(e);
         }
     }
+
     public interface OnNoteCreateListener {
         void onMessageSuccess(final MessageModel message);
 
         void onMessageError(final Exception error);
+    }
+
+    public interface OnNoteUpdateListener {
+        void onNoteUpdateSuccess(final MessageModel message);
+
+        void onNoteUpdateError(final Exception e);
     }
 }
