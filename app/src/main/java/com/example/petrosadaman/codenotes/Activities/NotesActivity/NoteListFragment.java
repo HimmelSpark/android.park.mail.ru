@@ -1,5 +1,6 @@
 package com.example.petrosadaman.codenotes.Activities.NotesActivity;
 
+import android.content.res.Configuration;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Rect;
@@ -8,6 +9,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.DividerItemDecoration;
@@ -21,9 +24,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
+import com.example.petrosadaman.codenotes.Models.Message.MessageModel;
 import com.example.petrosadaman.codenotes.Models.Note.NoteModel;
 import com.example.petrosadaman.codenotes.R;
+import com.example.petrosadaman.codenotes.Web.NoteApi;
 
+import java.util.List;
 import java.util.Objects;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -39,6 +45,29 @@ public class NoteListFragment extends Fragment implements
     private Toolbar toolbar;
     private RecyclerView rv;
 
+
+    public NoteApi.OnNoteDeleteListener listener = new NoteApi.OnNoteDeleteListener() {
+        @Override
+        public void onNoteDeleteSuccess(MessageModel message) {
+            //TODO что-то сделать
+        }
+
+        @Override
+        public void onNoteDeleteFailure(Exception e) {
+            //TODO что-то сделать
+        }
+    };
+    public NoteApi.OnNoteCreateListener listener1 = new NoteApi.OnNoteCreateListener() {
+        @Override
+        public void onMessageSuccess(MessageModel message) {
+
+        }
+
+        @Override
+        public void onMessageError(Exception error) {
+
+        }
+    };
 
 
     @Nullable
@@ -94,9 +123,15 @@ public class NoteListFragment extends Fragment implements
 
             notesAdapter.removeItem(adapterPosition);
 
+            NoteApi noteApi = NoteApi.getInstance();
+            noteApi.deleteNote(removedNote, listener);
+
             Snackbar snackbar = Snackbar
                     .make(((NotesActivity)Objects.requireNonNull(getActivity())).getDrawer(), "note removed", Snackbar.LENGTH_LONG);
-            snackbar.setAction("UNDO", v -> notesAdapter.restoreItem(removedNote , adapterPosition));
+            snackbar.setAction("UNDO", (v) -> {
+                notesAdapter.restoreItem(removedNote , adapterPosition);
+                noteApi.createNote(removedNote, listener1);
+            });
 
             snackbar.setActionTextColor(Color.YELLOW);
             snackbar.show();

@@ -3,6 +3,7 @@ package com.example.petrosadaman.codenotes.Web;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.widget.LinearLayout;
 
 import com.example.petrosadaman.codenotes.Activities.NotesActivity.Note;
 import com.example.petrosadaman.codenotes.DBManager.DBManager;
@@ -177,6 +178,37 @@ public class NoteApi {
         return handler;
     }
 
+    public ListenerHandler<NoteApi.OnNoteDeleteListener> deleteNote (
+            final NoteModel noteModel,
+            final NoteApi.OnNoteDeleteListener listener) {
+        final ListenerHandler<NoteApi.OnNoteDeleteListener> handler = new ListenerHandler<>(listener);
+        executor.execute(() -> {
+            try {
+
+                final Response<ResponseBody> response = noteService.deleteNote(noteModel).execute();
+                try (final ResponseBody responseBody = response.body()) {
+                    if (response.code() >= 300) {
+                        throw new IOException("HTTP code " + response.code());
+                    }
+
+                    if (responseBody == null) {
+                        throw new IOException("Empty response body");
+                    }
+
+                    final String body = responseBody.string();
+                    MessageModel message = parseMessage(body);
+                    invokeSuccessDelete(handler, message);
+                }
+
+            } catch (IOException e) {
+                logger.log(Level.SEVERE, e.getMessage());
+                invokeFailureDelete(handler, e);
+            }
+        });
+
+        return handler;
+    }
+
     private void invokeSuccess(ListenerHandler<NoteApi.OnNoteGetListener> handler, final List<NoteModel> note) {
         mainHandler.post(() -> {
             NoteApi.OnNoteGetListener listener = handler.getListener();
@@ -243,6 +275,30 @@ public class NoteApi {
         });
     }
 
+    private void invokeSuccessDelete(ListenerHandler<NoteApi.OnNoteDeleteListener> handler, final MessageModel message) {
+        mainHandler.post(() -> {
+            NoteApi.OnNoteDeleteListener listener = handler.getListener();
+            if (listener!= null) {
+                Log.d("API", "listener NOT null");
+                listener.onNoteDeleteSuccess(message);
+            } else {
+                Log.d("API", "listener is null");
+            }
+        });
+    }
+
+    private void invokeFailureDelete(ListenerHandler<NoteApi.OnNoteDeleteListener> handler, IOException e) {
+        mainHandler.post(() -> {
+            NoteApi.OnNoteDeleteListener listener = handler.getListener();
+            if (listener != null) {
+                Log.d("API", "listener NOT null");
+                listener.onNoteDeleteFailure(e);
+            } else {
+                Log.d("API", "listener is null");
+            }
+        });
+    }
+
     private List<NoteModel> parseNotes(final String body) throws IOException {
         try {
             Type listType = new TypeToken<List<NoteModel>>(){}.getType();
@@ -275,8 +331,16 @@ public class NoteApi {
     }
 
     public interface OnNoteUpdateListener {
+
         void onNoteUpdateSuccess(final MessageModel message);
 
         void onNoteUpdateError(final Exception e);
     }
+
+    public interface OnNoteDeleteListener {
+        void onNoteDeleteSuccess(final MessageModel message);
+
+        void onNoteDeleteFailure(final Exception e);
+    }
+
 }

@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/rv_item_background"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -23,9 +23,9 @@
                 android:textSize="13sp"
                 />
 
-        </RelativeLayout>
+        </LinearLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/rv_item_foreground"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -33,7 +33,7 @@
 
             <TextView
                 android:id="@+id/tv_item_header"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="70dp"
                 android:paddingTop="20dp"
                 android:paddingStart="5dp"
@@ -41,6 +41,7 @@
                 android:text="@string/some_text"
                 android:layout_gravity="center"
                 android:textSize="24sp"
+
                 android:layout_marginBottom="5dp"
 
                 android:textAppearance="?android:attr/textAppearanceListItemSmall"
@@ -49,6 +50,6 @@
                 android:background="?android:attr/selectableItemBackground"
                 />
 
-        </RelativeLayout>
+        </LinearLayout>
 
     </FrameLayout>

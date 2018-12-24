@@ -21,4 +21,7 @@ public interface NoteService {
     @POST("update")
     Call<ResponseBody> updateNote(@Body NoteModel note);
 
+    @POST("delete")
+    Call<ResponseBody> deleteNote(@Body NoteModel note);
+
 }

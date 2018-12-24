@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -99,8 +100,8 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
 
 
         private TextView textView;
-        private RelativeLayout viewForeground;
-        private RelativeLayout viewBackground;
+        private LinearLayout viewForeground;
+        private LinearLayout viewBackground;
 
         NoteViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -123,11 +124,11 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
             }
         }
 
-        public RelativeLayout getViewForeground() {
+        public LinearLayout getViewForeground() {
             return viewForeground;
         }
 
-        public RelativeLayout getViewBackground() {
+        public LinearLayout getViewBackground() {
             return viewBackground;
         }
     }
