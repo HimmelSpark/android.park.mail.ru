@@ -4,4 +4,5 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="progressColor">#802c8377</color>
+    <color name="rv_item_bg">#fa315b</color>
 </resources>

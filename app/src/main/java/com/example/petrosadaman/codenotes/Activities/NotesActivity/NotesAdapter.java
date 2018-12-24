@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.petrosadaman.codenotes.Models.Note.NoteModel;
@@ -45,11 +46,17 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
 
     public void updateItem(int position, NoteModel newNote) {
         noteList.set(position, newNote);
-        notifyDataSetChanged();
+        notifyItemChanged(position);
     }
 
-    public int getAdapterSize() {
-        return this.noteList.size();
+    public void removeItem(int position) {
+        noteList.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    public void restoreItem(NoteModel noteModel, int position) {
+        noteList.add(position, noteModel);
+        notifyItemInserted(position);
     }
 
 
@@ -90,12 +97,17 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
 
     class NoteViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+
         private TextView textView;
+        private RelativeLayout viewForeground;
+        private RelativeLayout viewBackground;
 
         NoteViewHolder(@NonNull View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
-            textView = itemView.findViewById(R.id.tv_item);
+            viewBackground = itemView.findViewById(R.id.rv_item_background);
+            viewForeground = itemView.findViewById(R.id.rv_item_foreground);
+            textView = itemView.findViewById(R.id.tv_item_header);
         }
 
         void bind(NoteModel note) {
@@ -109,6 +121,14 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
             if (itemClickListener != null) {
                 itemClickListener.onClick(v, getAdapterPosition());
             }
+        }
+
+        public RelativeLayout getViewForeground() {
+            return viewForeground;
+        }
+
+        public RelativeLayout getViewBackground() {
+            return viewBackground;
         }
     }
 }
