@@ -9,6 +9,10 @@
     tools:openDrawer="start">
 
     <include
+        layout="@layout/toolbar"
+        android:layout_width="wrap_content" />
+
+    <include
         layout="@layout/app_bar_notes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
