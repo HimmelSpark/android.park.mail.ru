@@ -124,6 +124,7 @@ public class UserApi {
                     }
                     final String body = responseBody.string();
                     final String sessionID = response.headers().get("JSESSIONID");
+                    UserModel.getUser().setSessionID(response.headers().get("Set-Cookie"));
                     db.insertUser (
                             user.getUsername(),
                             user.getEmail(),

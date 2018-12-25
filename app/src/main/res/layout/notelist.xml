@@ -11,8 +11,7 @@
             android:id="@+id/rv_notes"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layoutAnimation="@anim/layout_animation_fall_down"
-            android:paddingTop="56dp" />
+            android:layoutAnimation="@anim/layout_animation_fall_down" />
     </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>

@@ -54,12 +54,7 @@ public class RegistrationFragment extends Fragment {
 //            ((LogReg) Objects.requireNonNull(getActivity())).stopProgress();
 
             if (message.getMessage().equals("SUCCESSFULLY_REGISTERED")) {
-                String messageText = message.getMessage();
-                System.out.println(messageText); //ToDo | убрать
-                if (getActivity() == null) {
-                    System.out.println("ACTIVITY NULL"); //ToDo | убрать
-                }
-                ((LogReg)getActivity()).switchToNotes(message.getMessage());
+                ((LogReg)Objects.requireNonNull(getActivity())).switchToNotes(message.getMessage());
             }
         }
 
