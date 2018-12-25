@@ -30,4 +30,5 @@
     <string name="create">CREATE</string>
     <string name="some_text">some text</string>
     <string name="delete">DELETE</string>
+    <string name="logout">Logout</string>
 </resources>
